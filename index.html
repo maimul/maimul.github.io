@@ -151,6 +151,14 @@ h2{margin:0 0 .7em;font:800 clamp(30px,4.4vw,46px)/1.05 var(--display);font-stre
   .reveal .motto.in .line>span{transform:none}
   .reveal .sticker img{opacity:0;transform:translateX(120%) rotate(132deg)}
   .reveal .sticker.in img{animation:roll-in 1.15s both}
+  .reveal .period .tile{opacity:0;transform:scale(1.28)}
+  .reveal .period.in .tile{opacity:1;transform:none;animation:settle .6s cubic-bezier(.2,.8,.2,1) both}
+  .reveal .period.in .tile:nth-child(2){animation-delay:.06s}
+  .reveal .period.in .tile:nth-child(3){animation-delay:.12s}
+  .reveal .period.in .tile:nth-child(4){animation-delay:.18s}
+  .reveal .period.in .tile:nth-child(5){animation-delay:.24s}
+  .reveal .period.in .tile:nth-child(6){animation-delay:.3s}
+  .reveal .period.in .tile:nth-child(7){animation-delay:.36s}
 }
 /* Rolls like a wheel: 120% of its width is ~138deg of turn, then overshoots and rocks back to -6deg */
 @keyframes roll-in{
@@ -327,7 +335,7 @@ h2{margin:0 0 .7em;font:800 clamp(30px,4.4vw,46px)/1.05 var(--display);font-stre
 
 <script>
 (function () {
-  var targets = document.querySelectorAll('.sticker, .motto');
+  var targets = document.querySelectorAll('.sticker, .period, .motto');
   if (!targets.length || !('IntersectionObserver' in window)) return;
   document.documentElement.classList.add('reveal');
   var observer = new IntersectionObserver(function (entries) {
@@ -337,7 +345,7 @@ h2{margin:0 0 .7em;font:800 clamp(30px,4.4vw,46px)/1.05 var(--display);font-stre
         observer.unobserve(e.target);
       }
     });
-  }, { threshold: 0.5 });
+  }, { threshold: 0.4 });
   targets.forEach(function (t) { observer.observe(t); });
 })();
 </script>
