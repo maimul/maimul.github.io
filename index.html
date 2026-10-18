@@ -43,18 +43,19 @@ a{color:inherit}
 
 /* ---------- Hero: the title card ---------- */
 .hero{position:relative;isolation:isolate;overflow:hidden;min-height:min(100svh,920px);display:flex;align-items:center;padding:clamp(72px,12vh,128px) 0 clamp(56px,9vh,96px)}
-.smoke{position:absolute;inset:0;width:100%;height:100%;z-index:-2;opacity:.6;
+.smoke{position:absolute;inset:0;width:100%;height:100%;z-index:-2;opacity:.6;transform:translate3d(0,calc(var(--sy,0) * .5px),0);will-change:transform;
   -webkit-mask-image:linear-gradient(105deg,transparent 18%,#000 62%);mask-image:linear-gradient(105deg,transparent 18%,#000 62%)}
 .hero::after{content:"";position:absolute;inset:auto 0 0 0;height:30%;z-index:-1;background:linear-gradient(transparent,var(--smoke))}
 .ghosts{position:absolute;inset:0;z-index:-1;pointer-events:none}
 .ghost{position:absolute;display:grid;place-items:center;aspect-ratio:1;background:var(--tile);border:1.5px solid var(--tile-edge);border-radius:6px;
-  font:800 var(--g,40px)/1 var(--display);color:#fff;opacity:.13}
+  font:800 var(--g,40px)/1 var(--display);color:#fff;opacity:.13;will-change:transform;
+  transform:translate3d(0,calc(var(--sy,0) * var(--k) * 1px),0) rotate(calc(var(--r) + var(--sy,0) * var(--spin) * 1deg))}
 .ghost i{position:absolute;top:8%;right:10%;font:600 .26em/1 var(--display);font-style:normal;opacity:.8}
-.g1{--g:46px;width:104px;top:14%;right:9%;transform:rotate(8deg)}
-.g2{--g:30px;width:68px;top:42%;right:27%;transform:rotate(-12deg);filter:blur(1.5px);opacity:.09}
-.g3{--g:56px;width:128px;top:58%;right:4%;transform:rotate(-5deg)}
-.g4{--g:24px;width:56px;top:9%;right:33%;transform:rotate(14deg);filter:blur(2px);opacity:.08}
-.g5{--g:36px;width:84px;top:78%;right:24%;transform:rotate(10deg);filter:blur(.5px);opacity:.1}
+.g1{--g:46px;width:104px;top:14%;right:9%;--r:8deg;--k:.22;--spin:.015}
+.g2{--g:30px;width:68px;top:42%;right:27%;--r:-12deg;--k:.45;--spin:-.02;filter:blur(1.5px);opacity:.09}
+.g3{--g:56px;width:128px;top:58%;right:4%;--r:-5deg;--k:.12;--spin:.01}
+.g4{--g:24px;width:56px;top:9%;right:33%;--r:14deg;--k:.55;--spin:-.025;filter:blur(2px);opacity:.08}
+.g5{--g:36px;width:84px;top:78%;right:24%;--r:10deg;--k:.35;--spin:.02;filter:blur(.5px);opacity:.1}
 
 .title{margin:0 0 clamp(28px,4vw,44px);font-family:var(--display);font-weight:800;font-stretch:104%;font-size:clamp(50px,12.6vw,156px);line-height:1;letter-spacing:-.015em;color:var(--paper)}
 .title .row{display:flex;align-items:baseline}
@@ -88,11 +89,13 @@ a{color:inherit}
   .cur{animation:blink 1.1s steps(1) infinite}
   .actions .btn{animation:rise .6s cubic-bezier(.2,.8,.2,1) 1.05s backwards}
   .actions .btn:nth-child(2){animation-delay:1.17s}
+  .prompt span{display:inline-block;vertical-align:top;width:27ch;overflow:hidden;white-space:nowrap;animation:type 1.1s steps(27,end) 1.5s backwards}
   .btn:hover,.btn:focus-visible{transform:translateY(-3px);box-shadow:0 3px 0 var(--tile-edge)}
   .btn:active{transform:translateY(0);box-shadow:none;transition-duration:.06s}
 }
 @keyframes settle{from{opacity:0;transform:scale(1.28)}}
 @keyframes rise{from{opacity:0;transform:translateY(16px)}}
+@keyframes type{from{width:0}}
 @keyframes arrive{from{opacity:0;transform:translateX(-.06em)}}
 @keyframes blink{50%{opacity:0}}
 
@@ -328,25 +331,60 @@ h2{margin:0 0 .7em;font:800 clamp(30px,4.4vw,46px)/1.05 var(--display);font-stre
         <li><a href="https://linkedin.com/in/maimul">LinkedIn</a></li>
         <li><a href="https://github.com/maimul">GitHub</a></li>
       </ul>
-      <p class="binary" title="danger"><span aria-hidden="true">01100100 01100001 01101110 01100111 01100101 01110010</span><span class="sig" aria-hidden="true">ᗰᗩIᗰᑌᒪ</span><span class="sr">Maimul</span></p>
+      <p class="binary" title="danger"><span class="bits" aria-hidden="true">01100100 01100001 01101110 01100111 01100101 01110010</span><span class="sig" aria-hidden="true">ᗰᗩIᗰᑌᒪ</span><span class="sr">Maimul</span></p>
     </div>
   </div>
 </footer>
 
 <script>
 (function () {
-  var targets = document.querySelectorAll('.sticker, .period, .motto');
-  if (!targets.length || !('IntersectionObserver' in window)) return;
-  document.documentElement.classList.add('reveal');
-  var observer = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) {
-      if (e.isIntersecting) {
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Scroll reveals: CSS animates anything that gets the "in" class
+  var targets = document.querySelectorAll('.sticker, .period, .motto, .bits');
+  if (targets.length && 'IntersectionObserver' in window) {
+    document.documentElement.classList.add('reveal');
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
         e.target.classList.add('in');
         observer.unobserve(e.target);
+        if (!reduce && e.target.classList.contains('bits')) decode(e.target);
+      });
+    }, { threshold: 0.4 });
+    targets.forEach(function (t) { observer.observe(t); });
+  }
+
+  // Binary flickers, then locks in from left to right
+  function decode(el) {
+    var text = el.textContent, start = null, duration = 1100;
+    function frame(now) {
+      if (start === null) start = now;
+      var progress = Math.min((now - start) / duration, 1);
+      var locked = Math.floor(progress * text.length), out = '';
+      for (var i = 0; i < text.length; i++) {
+        out += i < locked || text[i] === ' ' ? text[i] : (Math.random() < 0.5 ? '0' : '1');
       }
-    });
-  }, { threshold: 0.4 });
-  targets.forEach(function (t) { observer.observe(t); });
+      el.textContent = out;
+      if (progress < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  // Hero depth: smoke and ghost tiles drift slower than the page
+  var hero = document.querySelector('.hero');
+  if (hero && !reduce) {
+    var queued = false, last = null;
+    var update = function () {
+      queued = false;
+      var y = Math.min(window.scrollY, hero.offsetHeight).toFixed(1);
+      if (y !== last) hero.style.setProperty('--sy', last = y);
+    };
+    window.addEventListener('scroll', function () {
+      if (!queued) { queued = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    update();
+  }
 })();
 </script>
 </body>
