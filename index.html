@@ -133,9 +133,16 @@ h2{margin:0 0 .7em;font:800 clamp(30px,4.4vw,46px)/1.05 var(--display);font-stre
 /* ---------- Footer ---------- */
 .foot{padding:clamp(64px,9vw,104px) 0 48px;border-top:1px solid var(--rule)}
 .motto{margin:0;font:800 clamp(28px,4.6vw,52px)/1.08 var(--display);font-stretch:110%;letter-spacing:-.01em}
-.motto span{display:block}
-.motto span:nth-child(2){color:var(--sage)}
-.motto span:nth-child(3){color:var(--tile-edge)}
+.motto .line{display:block;overflow:hidden;padding-bottom:.12em;margin-bottom:-.12em}
+.motto .line>span{display:block}
+.motto .line:nth-child(2){color:var(--sage)}
+.motto .line:nth-child(3){color:var(--tile-edge)}
+@media (prefers-reduced-motion:no-preference){
+  .reveal .motto .line>span{transform:translateY(110%);transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+  .reveal .motto .line:nth-child(2)>span{transition-delay:.16s}
+  .reveal .motto .line:nth-child(3)>span{transition-delay:.32s}
+  .reveal .motto.in .line>span{transform:none}
+}
 .foot-row{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:24px;margin-top:clamp(40px,6vw,72px)}
 .foot-links{display:flex;gap:24px;margin:0;padding:0;list-style:none;font:600 16px/1 var(--display);font-stretch:106%}
 .foot-links a{text-decoration:underline;text-decoration-color:var(--tile-edge);text-underline-offset:5px;text-decoration-thickness:2px}
@@ -291,7 +298,7 @@ h2{margin:0 0 .7em;font:800 clamp(30px,4.4vw,46px)/1.05 var(--display);font-stre
 
 <footer class="foot">
   <div class="wrap">
-    <p class="motto"><span>Architect the solution.</span><span>Automate the delivery.</span><span>Build for reliability.</span></p>
+    <p class="motto"><span class="line"><span>Architect the solution.</span></span><span class="line"><span>Automate the delivery.</span></span><span class="line"><span>Build for reliability.</span></span></p>
     <div class="foot-row">
       <ul class="foot-links">
         <li><a href="https://linkedin.com/in/maimul">LinkedIn</a></li>
@@ -302,5 +309,18 @@ h2{margin:0 0 .7em;font:800 clamp(30px,4.4vw,46px)/1.05 var(--display);font-stre
   </div>
 </footer>
 
+<script>
+(function () {
+  var motto = document.querySelector('.motto');
+  if (!motto || !('IntersectionObserver' in window)) return;
+  document.documentElement.classList.add('reveal');
+  new IntersectionObserver(function (entries, observer) {
+    if (entries.some(function (e) { return e.isIntersecting; })) {
+      motto.classList.add('in');
+      observer.disconnect();
+    }
+  }, { threshold: 0.5 }).observe(motto);
+})();
+</script>
 </body>
 </html>
