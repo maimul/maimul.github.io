@@ -13,7 +13,7 @@
 <meta property="og:title" content="Today I Learned">
 <meta property="og:description" content="One thing I learned, written up like a newspaper feature. By Maimul.">
 <meta property="og:url" content="https://maimul.github.io/blog/">
-<meta property="og:image" content="https://maimul.github.io/blog/001-bonjour-avahi-nas-printer/cover.png">
+<meta property="og:image" content="https://maimul.github.io/blog/002-bonjour-avahi-nas-printer/cover.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=Archivo+Narrow:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
@@ -184,7 +184,7 @@ thead th { font-family: var(--font-label); font-weight: 700; font-size: 0.8rem; 
 .recordkey i { width: 11px; height: 11px; display: inline-block; }
 
 /* Config block + commands */
-pre { margin: 0; overflow-x: auto; white-space: pre-wrap; overflow-wrap: anywhere; background: var(--paper-2); padding: 10px 12px; font-family: var(--font-mono); font-size: 0.84rem; line-height: 1.45; min-width: 0; }
+pre { margin: 0; overflow-x: auto; background: var(--paper-2); padding: 10px 12px; font-family: var(--font-mono); font-size: 0.84rem; line-height: 1.45; min-width: 0; }
 .cmds { display: grid; gap: 10px; }
 .cmd { display: grid; gap: 6px; border-top: 1px solid var(--rule-soft); padding-top: 10px; min-width: 0; }
 .cmd-top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
@@ -225,6 +225,90 @@ pre { margin: 0; overflow-x: auto; white-space: pre-wrap; overflow-wrap: anywher
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 
+/* ---------- Reader furniture: at a glance, lessons, checklist, takeaways ---------- */
+.cmd-row { align-items: flex-start; }
+.cmd pre { white-space: pre-wrap; overflow-wrap: anywhere; } /* commands may wrap; config files never do */
+.glance { border-top: 3px double var(--rule); border-bottom: 1px solid var(--rule); margin-top: 26px; padding-block: 18px; display: grid; gap: 18px 40px; }
+@media (min-width: 900px) { .glance { grid-template-columns: minmax(0, 1fr) minmax(0, 1.7fr) minmax(0, 1fr); } }
+.glance .tldr { grid-column: 1 / -1; border-left: 4px solid var(--cyan); padding-left: 14px; }
+.glance .tldr p { margin: 0; font-size: 1.02rem; line-height: 1.55; max-width: 92ch; }
+.glance h3 { margin: 0 0 9px; font-family: var(--font-label); font-weight: 600; font-size: 0.74rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.chips li { padding: 2px 10px; border: 1px solid var(--rule); border-radius: 999px; font-family: var(--font-label); font-weight: 600; font-size: 0.8rem; letter-spacing: 0.03em; }
+.learn { margin: 0; padding-left: 1.2em; display: grid; gap: 7px; font-size: 0.99rem; line-height: 1.45; }
+.learn li::marker { color: var(--cyan); font-weight: 700; }
+.glance p { margin: 0 0 8px; font-size: 0.97rem; line-height: 1.5; }
+.lesson { display: block; margin-top: 5px; font-size: 0.93rem; line-height: 1.45; color: var(--muted); }
+.lesson b { font-family: var(--font-label); font-weight: 700; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ok); margin-right: 4px; }
+.checklist { counter-reset: step; list-style: none; margin: 0; padding: 0; display: grid; max-width: 72ch; }
+.checklist li { counter-increment: step; display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 12px; padding-block: 14px; border-top: 1px solid var(--rule-soft); }
+.checklist li::before { content: counter(step); font-family: var(--font-head); font-weight: 700; font-size: 1.8rem; line-height: 1; color: var(--cyan); }
+.checklist h3 { margin-bottom: 5px; font-size: 1.14rem; }
+.checklist p { margin: 0; }
+.checklist pre { margin-top: 8px; }
+.takeaways { border: 2px solid var(--rule); background: var(--surface); padding: 16px 20px 18px; display: grid; gap: 10px; }
+.takeaways ol { margin: 0; padding-left: 1.3em; display: grid; gap: 9px; }
+.takeaways li { font-size: 1.04rem; line-height: 1.5; }
+.takeaways li::marker { font-family: var(--font-head); font-weight: 700; }
+
+/* ---------- Case file furniture (lens: case file) ---------- */
+.tag.clue { background: var(--yellow-tint); color: var(--yellow); }
+.suspects { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.suspects li { display: grid; gap: 4px; border-top: 1px solid var(--rule-soft); padding-top: 10px; font-size: 0.95rem; line-height: 1.45; }
+.suspects li:first-child { border-top: 0; padding-top: 0; }
+.suspects b { font-family: var(--font-head); font-size: 1.04rem; }
+.suspects .pill { justify-self: start; }
+.pill.warn { background: var(--yellow-tint); color: var(--yellow); }
+.wanted { justify-self: center; width: min(100%, 440px); margin: 16px auto 8px; padding: 20px 24px 18px; background: var(--surface); border: 2px solid var(--ink); outline: 1px solid var(--ink); outline-offset: 5px; text-align: center; display: grid; gap: 10px; transform: rotate(-1.2deg); }
+.wanted .big { margin: 0; padding-left: 0.16em; font-family: var(--font-label); font-weight: 700; font-size: clamp(2.4rem, 8vw, 3.4rem); letter-spacing: 0.16em; line-height: 1; }
+.wanted .for { margin: 0; font-family: var(--font-head); font-style: italic; color: var(--muted); }
+.wanted .who { margin: 0; border-block: 3px double var(--rule); padding-block: 8px; font-family: var(--font-mono); font-weight: 600; font-size: clamp(1.15rem, 4vw, 1.45rem); }
+.wanted dl { margin: 0; display: grid; gap: 7px; text-align: left; }
+.wanted dl div { display: grid; grid-template-columns: 7em minmax(0, 1fr); gap: 10px; font-size: 0.95rem; line-height: 1.4; }
+.wanted dt { padding-top: 3px; font-family: var(--font-label); font-weight: 600; font-size: 0.72rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+.wanted dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.wanted .reward { margin: 0; border-top: 1px dashed var(--rule); padding-top: 10px; font-family: var(--font-label); font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+.wanted .spoiler { margin: 0; font-size: 0.85rem; font-style: italic; color: var(--muted); }
+.obit { border-top: 3px solid var(--rule); border-bottom: 1px solid var(--rule); padding-block: 14px; display: grid; gap: 8px; }
+.obit h3 { font-size: 1.3rem; }
+.obit p { margin: 0; font-size: 0.98rem; line-height: 1.55; }
+.closing { font-size: 1.12rem; }
+.stamp { justify-self: start; margin: 4px 0 4px 10px; padding: 6px 16px 6px 22px; border: 4px double var(--bad); color: var(--bad); font-family: var(--font-label); font-weight: 700; font-size: 1.5rem; letter-spacing: 0.18em; text-transform: uppercase; transform: rotate(-5deg); }
+@media (max-width: 420px) { .wanted dl div { grid-template-columns: minmax(0, 1fr); gap: 0; } }
+
+/* ---------- Layout: newspaper columns on wide screens, one column on phones ---------- */
+.article { grid-template-columns: minmax(0, 1fr); column-gap: 0; }
+.rail { grid-column: auto; grid-row: auto; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); align-items: start; }
+.article > .body:not(.span), .body.span > :not(figure) { width: 100%; max-width: none; }
+.body.span > .wanted { width: min(100%, 440px); justify-self: center; }
+.body.span > .stamp { width: auto; justify-self: start; }
+.prose { display: block; }
+.prose > * + * { margin-top: 0.85em; }
+.prose > .label { column-span: all; margin-bottom: 0.85em; }
+.pull { width: 100%; max-width: 46ch !important; justify-self: center; text-align: center; }
+.obit p { max-width: 80ch; }
+@media (min-width: 900px) {
+  .prose { columns: 2; column-gap: 44px; column-rule: 1px solid var(--rule-soft); }
+  .timeline { display: block; columns: 2; column-gap: 44px; column-rule: 1px solid var(--rule-soft); }
+  .timeline li { break-inside: avoid; }
+  .checklist { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 44px; max-width: none; }
+  /* Setup steps: explanation on the left, the code for that step on the right. */
+  .checklist.steps { grid-template-columns: minmax(0, 1fr); }
+  .steps li > div { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); column-gap: 32px; align-items: start; }
+  .steps li > div > :is(h3, p) { grid-column: 1; }
+  .steps li > div > :is(pre, .cmd, .cmds) { grid-column: 2; grid-row: 1 / span 6; margin-top: 0; }
+  .steps li > div:not(:has(pre, .cmd, .cmds)) > * { grid-column: 1 / -1; max-width: 80ch; }
+  .takeaways ol { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 32px; }
+  .body.span > .cmds { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 32px; }
+  .quiz { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); align-items: start; }
+  .gloss { display: block; columns: 2; column-gap: 44px; column-rule: 1px solid var(--rule-soft); }
+  .gloss dt { break-after: avoid; margin-top: 10px; }
+  .gloss dd { break-inside: avoid; }
+  .obit { grid-template-columns: minmax(0, 1fr) minmax(0, 2.2fr); column-gap: 32px; }
+  .obit .label, .obit h3 { grid-column: 1; }
+  .obit p { grid-column: 2; grid-row: 1 / span 2; }
+}
+
 /* ---------- Front page ---------- */
 .lead-story { display: grid; gap: 22px 40px; padding-block: 34px; border-bottom: 1px solid var(--rule); }
 @media (min-width: 860px) { .lead-story { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: center; } }
@@ -237,6 +321,9 @@ pre { margin: 0; overflow-x: auto; white-space: pre-wrap; overflow-wrap: anywher
 .lead-head a:hover, .issue-head a:hover { text-decoration: underline; text-decoration-color: var(--cyan); }
 .lead-copy .deck { margin: 0; text-align: left; max-width: 44ch; }
 .read { color: var(--ink); }
+.lead-learn { display: grid; gap: 6px; }
+.lead-learn .label { color: var(--muted); font-size: 0.72rem; }
+.lead-learn ul { margin: 0; padding-left: 1.1em; display: grid; gap: 4px; font-size: 0.97rem; line-height: 1.45; }
 .earlier { padding-block: 30px 0; display: grid; gap: 6px; }
 .earlier > .label { color: var(--muted); border-bottom: 3px double var(--rule); padding-bottom: 8px; }
 .issues { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 0 32px; }
@@ -259,7 +346,7 @@ pre { margin: 0; overflow-x: auto; white-space: pre-wrap; overflow-wrap: anywher
   <nav class="til-nav" aria-label="Site"><a href="../">← maimul.github.io</a><a href="feed.xml">RSS</a></nav>
   <header class="nameplate">
     <div class="earline">
-      <span class="label">Vol. 1 · 1 issue</span>
+      <span class="label">Vol. 1 · 2 issues</span>
       <span class="label">Maimul’s notebook</span>
     </div>
     <h1 class="title">Today <span class="title-i">I</span> Learned</h1>
@@ -273,14 +360,21 @@ pre { margin: 0; overflow-x: auto; white-space: pre-wrap; overflow-wrap: anywher
 
   <main>
     <article class="lead-story" aria-labelledby="lead-h">
-      <a class="lead-cover" href="001-bonjour-avahi-nas-printer/" tabindex="-1" aria-hidden="true"><img src="001-bonjour-avahi-nas-printer/cover.png" width="1200" height="630" alt=""></a>
+      <a class="lead-cover" href="002-bonjour-avahi-nas-printer/" tabindex="-1" aria-hidden="true"><img src="002-bonjour-avahi-nas-printer/cover.png" width="1200" height="630" alt=""></a>
       <div class="lead-copy">
-        <span class="label kicker">No. 001 · bonjour · mdns · avahi · airprint</span>
-        <h2 id="lead-h" class="lead-head"><a href="001-bonjour-avahi-nas-printer/">Two servers, one name, and the printer nobody could reach</a></h2>
-        <p class="deck">An iPhone could see the NAS printer but never print to it. Underneath were a stale IP address, a crashing print backend, a printer that spoke a different language, and two Bonjour servers that renamed each other 319 times.</p>
-        <span class="label">Monday, 19 October 2026 · <a class="read" href="001-bonjour-avahi-nas-printer/">Read the issue →</a></span>
+        <span class="label kicker">No. 002 · bonjour · mdns · avahi · airprint</span>
+        <h2 id="lead-h" class="lead-head"><a href="002-bonjour-avahi-nas-printer/">The Case of the Printer Nobody Could Reach</a></h2>
+        <p class="deck">My iPhone could see my home printer, but it hadn&#x27;t printed a page in 127 days. Here&#x27;s how I tracked down why, what finally fixed it, and how to check your own setup when AirPrint goes quiet.</p>
+        <div class="lead-learn"><span class="label">What you’ll learn</span><ul><li>How your phone finds a printer by name when there&#x27;s no DNS server (mDNS and DNS-SD).</li><li>Why two Bonjour servers on one machine keep renaming each other, and the three lines that stop it.</li><li>What makes a printer &quot;AirPrint&quot;, and how a NAS can add it to a printer that doesn&#x27;t have it.</li><li>A step-by-step checklist for a printer that shows up but won&#x27;t print.</li></ul></div>
+        <span class="label">Monday, 19 October 2026 · <a class="read" href="002-bonjour-avahi-nas-printer/">Read the issue →</a></span>
       </div>
     </article>
+    <section class="earlier" aria-labelledby="earlier-h">
+      <h2 id="earlier-h" class="label">Earlier editions</h2>
+      <ol class="issues">
+      <li><span class="label">No. 001 · 19 Oct 2026</span><h3 class="issue-head"><a href="001-airprint-for-any-printer/">AirPrint for a Printer That Never Had It</a></h3><p>My Epson L3250 doesn&#x27;t support AirPrint, so my iPhone can&#x27;t see it. One small container on my Synology NAS fixes that. Here&#x27;s how it works, and how to set it up for your own printer.</p><span class="label">Related to: airprint · cups · avahi · bonjour</span></li>
+      </ol>
+    </section>
   </main>
 
   <footer class="front-colophon">
