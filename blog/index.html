@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Today I Learned · Maimul</title>
+<meta name="description" content="One thing I learned, written up like a newspaper feature: what broke, what I thought, what was true, with diagrams. By Maimul.">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://maimul.github.io/blog/">
+<link rel="alternate" type="application/rss+xml" title="Today I Learned" href="feed.xml">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Today I Learned · Maimul">
+<meta property="og:title" content="Today I Learned">
+<meta property="og:description" content="One thing I learned, written up like a newspaper feature. By Maimul.">
+<meta property="og:url" content="https://maimul.github.io/blog/">
+<meta property="og:image" content="https://maimul.github.io/blog/001-bonjour-avahi-nas-printer/cover.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=Archivo+Narrow:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Nameplate face: Chomsky by Fredrick R. Brennan, after the New York Times masthead. SIL OFL 1.1, served from fonts/. */
+@font-face { font-family: "Chomsky"; src: url("fonts/Chomsky.woff2") format("woff2"); font-display: swap; }
+/* Layout: broadsheet feature. Centred nameplate; article grid = reading column (~64ch) + 300px right rail of sidebars on wide screens, one column on phones; infographics span both. Spot colours C/M/Y/K code the four DNS record types. */
+:root {
+  --paper: #eeece6;
+  --paper-2: #e3e0d8;
+  --surface: #f7f6f2;
+  --ink: #1b1b1a;
+  --muted: #5d5a54;
+  --rule: #1b1b1a;
+  --rule-soft: #c8c4ba;
+  --cyan: #00799f;   --cyan-tint: #d9ecf2;
+  --magenta: #b4146f; --magenta-tint: #f3dfe9;
+  --yellow: #8f6500; --yellow-tint: #f1e6c3;
+  --key: #1b1b1a;    --key-tint: #dedbd2;
+  --bad: #b8360f;    --bad-tint: #f5ddd3;
+  --ok: #1d7650;     --ok-tint: #d8ecdf;
+  --font-nameplate: "Chomsky", "Old English Text MT", Georgia, serif;
+  --font-head: "Newsreader", "Iowan Old Style", Georgia, serif;
+  --font-body: "Newsreader", "Iowan Old Style", Georgia, serif;
+  --font-label: "Archivo Narrow", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #151618; --paper-2: #1f2125; --surface: #1b1d20; --ink: #e9e6df; --muted: #a29e96;
+    --rule: #e9e6df; --rule-soft: #3a3d42;
+    --cyan: #45c6ef; --cyan-tint: #10303b; --magenta: #f06aae; --magenta-tint: #3a1529;
+    --yellow: #e9bc3c; --yellow-tint: #33290c; --key: #e9e6df; --key-tint: #2a2d31;
+    --bad: #ff7d5c; --bad-tint: #3b1a10; --ok: #5ad69a; --ok-tint: #0f2e20;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #151618; --paper-2: #1f2125; --surface: #1b1d20; --ink: #e9e6df; --muted: #a29e96;
+  --rule: #e9e6df; --rule-soft: #3a3d42;
+  --cyan: #45c6ef; --cyan-tint: #10303b; --magenta: #f06aae; --magenta-tint: #3a1529;
+  --yellow: #e9bc3c; --yellow-tint: #33290c; --key: #e9e6df; --key-tint: #2a2d31;
+  --bad: #ff7d5c; --bad-tint: #3b1a10; --ok: #5ad69a; --ok-tint: #0f2e20;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font-family: var(--font-body); font-size: 1.09rem; line-height: 1.62; padding-inline: 18px; padding-block: 0 72px; }
+.paper { max-width: 1120px; margin: 0 auto; }
+p { margin: 0; }
+h2, h3 { font-family: var(--font-head); text-wrap: balance; margin: 0; line-height: 1.12; }
+code, .mono { font-family: var(--font-mono); font-size: 0.84em; }
+:not(pre) > code { background: var(--paper-2); padding: 0.06em 0.32em; border-radius: 3px; }
+a { color: inherit; text-decoration-color: var(--cyan); text-underline-offset: 2px; }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+.label { font-family: var(--font-label); font-weight: 600; font-size: 0.8rem; letter-spacing: 0.09em; text-transform: uppercase; }
+
+/* ---------- Nameplate ---------- */
+.nameplate { padding-block: 26px 0; text-align: center; display: grid; gap: 10px; }
+.earline { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px 16px; color: var(--muted); }
+.earline .label { font-size: 0.74rem; }
+.colourbar { display: inline-flex; gap: 3px; vertical-align: middle; }
+.colourbar i { width: 11px; height: 11px; display: inline-block; }
+.colourbar .c { background: var(--cyan); } .colourbar .m { background: var(--magenta); } .colourbar .y { background: var(--yellow); } .colourbar .k { background: var(--key); }
+.title { font-family: var(--font-nameplate); font-weight: 400; font-size: clamp(2.6rem, 9.5vw, 5.6rem); line-height: 1; margin: 4px 0 0; letter-spacing: 0; }
+.title-i { margin-right: -0.06em; } /* Chomsky's I carries a wide right side bearing */
+.motto { font-family: var(--font-head); font-style: italic; color: var(--muted); font-size: 0.98rem; }
+.dateline { border-top: 3px double var(--rule); border-bottom: 1px solid var(--rule); padding-block: 7px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 18px; }
+.dateline .label { font-size: 0.74rem; }
+
+/* ---------- Headline block ---------- */
+.headblock { padding-block: 34px 26px; border-bottom: 1px solid var(--rule); display: grid; gap: 14px; max-width: 900px; margin: 0 auto; text-align: center; }
+.kicker { color: var(--cyan); }
+.headline { font-family: var(--font-head); font-weight: 700; font-size: clamp(2.1rem, 5.6vw, 3.7rem); line-height: 1.04; letter-spacing: -0.015em; text-wrap: balance; margin: 0; }
+.deck { font-family: var(--font-head); font-style: italic; font-size: clamp(1.12rem, 2.3vw, 1.36rem); line-height: 1.4; color: var(--ink); max-width: 46ch; margin: 0 auto; text-wrap: balance; }
+.byline { color: var(--muted); display: flex; justify-content: center; flex-wrap: wrap; gap: 4px 16px; }
+.byline .label { font-size: 0.76rem; }
+
+/* ---------- Article grid ---------- */
+.article { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; padding-block: 30px 0; }
+@media (min-width: 960px) {
+  .article { grid-template-columns: minmax(0, 1fr) 300px; column-gap: 44px; }
+  .rail { grid-column: 2; grid-row: span 3; align-self: start; }
+  .span { grid-column: 1 / -1; }
+}
+.body { display: grid; gap: 16px; max-width: 64ch; min-width: 0; }
+/* Full-width blocks: graphics use the whole page; everything else keeps the 64ch reading measure. */
+.body.span { max-width: none; grid-template-columns: minmax(0, 1fr); }
+.body.span > :not(figure) { max-width: min(64ch, 100%); }
+.body h2 { font-size: 1.85rem; padding-top: 12px; }
+.body h3 { font-size: 1.25rem; }
+.section-head { display: grid; gap: 6px; border-top: 1px solid var(--rule); padding-top: 14px; }
+.section-head .label { color: var(--muted); font-size: 0.74rem; }
+.lead::first-letter { font-family: var(--font-head); font-weight: 700; float: left; font-size: 4.6em; line-height: 0.82; padding: 6px 10px 0 0; color: var(--ink); }
+
+/* Pull quote */
+.pull { border-top: 3px solid var(--rule); border-bottom: 1px solid var(--rule); padding-block: 16px; margin-block: 8px; font-family: var(--font-head); font-style: italic; font-weight: 600; font-size: clamp(1.35rem, 3vw, 1.8rem); line-height: 1.25; text-wrap: balance; }
+.pull cite { display: block; margin-top: 8px; font-style: normal; font-weight: 600; font-family: var(--font-label); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+/* Sidebars */
+.rail { display: grid; gap: 22px; min-width: 0; }
+.box { border-top: 4px solid var(--rule); background: var(--surface); padding: 14px 16px 16px; display: grid; gap: 10px; min-width: 0; }
+.box h3 { font-size: 1.2rem; }
+.box p, .box li { font-size: 0.98rem; line-height: 1.5; }
+.box ul, .box ol { margin: 0; padding-left: 1.1em; display: grid; gap: 6px; }
+.box.eli5 { border-top-color: var(--cyan); }
+.numbers { display: grid; gap: 12px; }
+.num { display: grid; grid-template-columns: 84px 1fr; gap: 10px; align-items: baseline; border-top: 1px solid var(--rule-soft); padding-top: 10px; }
+.num:first-child { border-top: 0; padding-top: 0; }
+.num b { font-family: var(--font-head); font-weight: 700; font-size: 2.2rem; line-height: 1; font-variant-numeric: tabular-nums; }
+.num span { font-size: 0.93rem; line-height: 1.4; }
+.box.correction { border-top-color: var(--bad); }
+.box.correction .label { color: var(--bad); }
+
+/* Timeline */
+.timeline { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.timeline li { display: grid; grid-template-columns: 92px 1fr; gap: 14px; padding-block: 10px; border-top: 1px solid var(--rule-soft); }
+.timeline time { font-family: var(--font-label); font-weight: 700; font-size: 0.86rem; letter-spacing: 0.04em; font-variant-numeric: tabular-nums; padding-top: 3px; }
+.timeline .tag { font-family: var(--font-label); font-weight: 600; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 1px 6px; margin-right: 6px; border-radius: 2px; vertical-align: 2px; }
+.tag.bug { background: var(--bad-tint); color: var(--bad); }
+.tag.fix { background: var(--ok-tint); color: var(--ok); }
+.tag.dead { background: var(--paper-2); color: var(--muted); }
+
+/* Figures as newspaper graphics */
+figure { margin: 4px 0 0; display: grid; gap: 10px; border-top: 1px solid var(--rule); padding-top: 10px; min-width: 0; }
+figure .graphic-label { color: var(--muted); }
+.scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; background: var(--surface); padding: 14px; }
+.scroll svg { display: block; width: 100%; max-width: 940px; height: auto; margin-inline: auto; }
+/* Narrower than a graphic (phones): it scrolls sideways, and the hint says so. */
+.swipe { display: none; color: var(--muted); font-size: 0.72rem; }
+figure.wide .swipe { display: block; }
+figcaption { font-size: 0.92rem; line-height: 1.5; color: var(--muted); max-width: 80ch; }
+figcaption b { color: var(--ink); }
+figcaption .credit { font-family: var(--font-label); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; margin-left: 6px; }
+
+/* SVG classes (page CSS keeps both editions readable) */
+svg { color: var(--ink); font-family: var(--font-mono); }
+.s-box { fill: var(--surface); stroke: var(--ink); stroke-width: 1.4; }
+.s-box-soft { fill: var(--paper); stroke: var(--rule-soft); stroke-width: 1.2; }
+.s-line { stroke: var(--ink); stroke-width: 1.4; fill: none; }
+.s-dash { stroke: var(--muted); stroke-width: 1.2; stroke-dasharray: 4 4; fill: none; }
+.s-rule { stroke: var(--rule-soft); stroke-width: 1.2; fill: none; }
+.t { fill: var(--ink); font-size: 13px; }
+.t-b { fill: var(--ink); font-size: 13px; font-weight: 600; }
+.t-s { fill: var(--muted); font-size: 11.5px; }
+.t-head { fill: var(--ink); font-family: var(--font-head); font-size: 16px; font-weight: 700; }
+.c-stroke { stroke: var(--cyan); } .c-fill { fill: var(--cyan); } .c-tint { fill: var(--cyan-tint); }
+.m-stroke { stroke: var(--magenta); } .m-fill { fill: var(--magenta); } .m-tint { fill: var(--magenta-tint); }
+.y-stroke { stroke: var(--yellow); } .y-fill { fill: var(--yellow); } .y-tint { fill: var(--yellow-tint); }
+.k-stroke { stroke: var(--key); } .k-fill { fill: var(--key); } .k-tint { fill: var(--key-tint); }
+.bad-stroke { stroke: var(--bad); } .bad-fill { fill: var(--bad); } .bad-tint { fill: var(--bad-tint); }
+.ok-stroke { stroke: var(--ok); } .ok-fill { fill: var(--ok); } .ok-tint { fill: var(--ok-tint); }
+.w2 { stroke-width: 2; }
+
+/* Tables */
+.tbl-wrap { overflow-x: auto; min-width: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.95rem; }
+th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--rule-soft); vertical-align: top; }
+thead th { font-family: var(--font-label); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 2px solid var(--rule); }
+.pill { display: inline-block; font-family: var(--font-mono); font-size: 0.76rem; padding: 1px 7px; border-radius: 999px; white-space: nowrap; }
+.pill.ok { background: var(--ok-tint); color: var(--ok); }
+.pill.bad { background: var(--bad-tint); color: var(--bad); }
+.verdict td { font-weight: 600; }
+
+/* Record key */
+.recordkey { display: flex; flex-wrap: wrap; gap: 6px 18px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); }
+.recordkey span { display: inline-flex; gap: 7px; align-items: center; }
+.recordkey i { width: 11px; height: 11px; display: inline-block; }
+
+/* Config block + commands */
+pre { margin: 0; overflow-x: auto; white-space: pre-wrap; overflow-wrap: anywhere; background: var(--paper-2); padding: 10px 12px; font-family: var(--font-mono); font-size: 0.84rem; line-height: 1.45; min-width: 0; }
+.cmds { display: grid; gap: 10px; }
+.cmd { display: grid; gap: 6px; border-top: 1px solid var(--rule-soft); padding-top: 10px; min-width: 0; }
+.cmd-top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
+.cmd-what { font-size: 0.98rem; }
+.cmd-where { color: var(--muted); font-size: 0.7rem; }
+.cmd-row { display: flex; gap: 8px; min-width: 0; }
+.cmd-row pre { flex: 1; }
+.copy { font-family: var(--font-label); font-weight: 600; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; border: 1px solid var(--rule); background: var(--surface); color: var(--ink); padding: 0 12px; cursor: pointer; }
+.copy:hover { background: var(--paper-2); }
+
+/* Field guide grid */
+.guide { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0 28px; }
+.guide div { border-top: 1px solid var(--rule-soft); padding-block: 12px; display: grid; gap: 4px; min-width: 0; }
+.guide h3 { font-size: 1.08rem; }
+.guide p { font-size: 0.97rem; line-height: 1.5; }
+
+/* Puzzle corner */
+.quiz { display: grid; gap: 10px; }
+.quiz details { border: 1px solid var(--rule); background: var(--surface); padding: 12px 14px; }
+.quiz summary { cursor: pointer; font-family: var(--font-head); font-weight: 600; font-size: 1.05rem; list-style: none; display: grid; grid-template-columns: 28px 1fr; gap: 6px; }
+.quiz summary::-webkit-details-marker { display: none; }
+.quiz summary .q { font-family: var(--font-label); font-weight: 700; color: var(--cyan); }
+.quiz details[open] summary { margin-bottom: 8px; }
+.quiz .a { font-size: 0.98rem; padding-left: 34px; }
+.quiz .reveal { font-family: var(--font-label); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding-left: 34px; }
+.quiz details[open] .reveal { display: none; }
+
+/* Glossary + colophon */
+.gloss { display: grid; grid-template-columns: max-content 1fr; gap: 8px 16px; margin: 0; }
+.gloss dt { font-family: var(--font-mono); font-size: 0.84rem; font-weight: 600; padding-top: 2px; }
+.gloss dd { margin: 0; font-size: 0.97rem; line-height: 1.5; min-width: 0; }
+@media (max-width: 560px) { .gloss { grid-template-columns: 1fr; gap: 2px; } .gloss dd { margin-bottom: 10px; } }
+.colophon { border-top: 3px double var(--rule); margin-top: 40px; padding-top: 14px; display: grid; gap: 10px; }
+.colophon .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 10px 26px; }
+.colophon .facts div { display: grid; gap: 2px; font-size: 0.93rem; line-height: 1.45; min-width: 0; }
+.colophon .facts .label { color: var(--muted); font-size: 0.7rem; }
+.private { color: var(--bad); }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+/* ---------- Front page ---------- */
+.lead-story { display: grid; gap: 22px 40px; padding-block: 34px; border-bottom: 1px solid var(--rule); }
+@media (min-width: 860px) { .lead-story { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: center; } }
+.lead-cover { display: block; border: 1px solid var(--rule); background: var(--surface); }
+.lead-cover img { display: block; width: 100%; height: auto; }
+.lead-copy { display: grid; gap: 14px; align-content: start; }
+.lead-copy .kicker { color: var(--cyan); }
+.lead-head { font-family: var(--font-head); font-weight: 700; font-size: clamp(1.9rem, 4.2vw, 2.9rem); line-height: 1.05; letter-spacing: -0.015em; margin: 0; text-wrap: balance; }
+.lead-head a, .issue-head a { text-decoration: none; }
+.lead-head a:hover, .issue-head a:hover { text-decoration: underline; text-decoration-color: var(--cyan); }
+.lead-copy .deck { margin: 0; text-align: left; max-width: 44ch; }
+.read { color: var(--ink); }
+.earlier { padding-block: 30px 0; display: grid; gap: 6px; }
+.earlier > .label { color: var(--muted); border-bottom: 3px double var(--rule); padding-bottom: 8px; }
+.issues { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 0 32px; }
+.issues li { display: grid; gap: 6px; padding-block: 16px; border-bottom: 1px solid var(--rule-soft); }
+.issues .label { color: var(--muted); font-size: 0.72rem; }
+.issue-head { font-family: var(--font-head); font-weight: 700; font-size: 1.3rem; line-height: 1.15; margin: 0; }
+.issues p { margin: 0; font-size: 0.97rem; line-height: 1.5; color: var(--muted); }
+.front-colophon { border-top: 3px double var(--rule); margin-top: 40px; padding-top: 14px; display: grid; gap: 8px; color: var(--muted); }
+.front-colophon p { margin: 0; max-width: 70ch; font-size: 0.97rem; }
+.front-colophon .label { font-size: 0.7rem; }
+</style>
+<style>
+.til-nav { display: flex; justify-content: space-between; gap: 12px; padding-top: 14px; }
+.til-nav a { color: var(--muted); text-decoration: none; font-family: var(--font-label); font-weight: 600; font-size: 0.74rem; letter-spacing: 0.09em; text-transform: uppercase; }
+.til-nav a:hover { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="paper">
+  <nav class="til-nav" aria-label="Site"><a href="../">← maimul.github.io</a><a href="feed.xml">RSS</a></nav>
+  <header class="nameplate">
+    <div class="earline">
+      <span class="label">Vol. 1 · 1 issue</span>
+      <span class="label">Maimul’s notebook</span>
+    </div>
+    <h1 class="title">Today <span class="title-i">I</span> Learned</h1>
+    <p class="motto">All the bugs that are fit to print</p>
+    <div class="dateline">
+      <span class="label">Latest: Monday, 19 October 2026</span>
+      <span class="label">Home lab · cloud · infrastructure</span>
+      <span class="label">Free to read</span>
+    </div>
+  </header>
+
+  <main>
+    <article class="lead-story" aria-labelledby="lead-h">
+      <a class="lead-cover" href="001-bonjour-avahi-nas-printer/" tabindex="-1" aria-hidden="true"><img src="001-bonjour-avahi-nas-printer/cover.png" width="1200" height="630" alt=""></a>
+      <div class="lead-copy">
+        <span class="label kicker">No. 001 · bonjour · mdns · avahi · airprint</span>
+        <h2 id="lead-h" class="lead-head"><a href="001-bonjour-avahi-nas-printer/">Two servers, one name, and the printer nobody could reach</a></h2>
+        <p class="deck">An iPhone could see the NAS printer but never print to it. Underneath were a stale IP address, a crashing print backend, a printer that spoke a different language, and two Bonjour servers that renamed each other 319 times.</p>
+        <span class="label">Monday, 19 October 2026 · <a class="read" href="001-bonjour-avahi-nas-printer/">Read the issue →</a></span>
+      </div>
+    </article>
+  </main>
+
+  <footer class="front-colophon">
+    <p>Each issue is one thing I learned, written up properly: what broke, what I thought was going on, what was actually true, and the diagrams that made it click. Dead ends included. Written by Maimul, with research help from Claude.</p>
+    <span class="label">Nameplate set in Chomsky by Fredrick R. Brennan (SIL Open Font License 1.1)</span>
+  </footer>
+</div>
+</body>
+</html>

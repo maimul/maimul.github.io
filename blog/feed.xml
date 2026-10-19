@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>Today I Learned · Maimul</title>
+  <link>https://maimul.github.io/blog/</link>
+  <atom:link href="https://maimul.github.io/blog/feed.xml" rel="self" type="application/rss+xml"/>
+  <description>One thing I learned, written up like a newspaper feature.</description>
+  <language>en</language>
+  <lastBuildDate>Mon, 19 Oct 2026 09:00:00 +0800</lastBuildDate>
+  <item>
+    <title>Two servers, one name, and the printer nobody could reach</title>
+    <link>https://maimul.github.io/blog/001-bonjour-avahi-nas-printer/</link>
+    <guid isPermaLink="true">https://maimul.github.io/blog/001-bonjour-avahi-nas-printer/</guid>
+    <pubDate>Mon, 19 Oct 2026 09:00:00 +0800</pubDate>
+    <description>An iPhone could see the NAS printer but never print to it. Underneath were a stale IP address, a crashing print backend, a printer that spoke a different language, and two Bonjour servers that renamed each other 319 times.</description>
+    <category>bonjour</category>
+    <category>mdns</category>
+    <category>avahi</category>
+    <category>airprint</category>
+    <category>cups</category>
+    <category>synology</category>
+    <category>docker</category>
+    <category>home-network</category>
+  </item>
+</channel>
+</rss>
