@@ -333,6 +333,7 @@ pre { margin: 0; overflow-x: auto; background: var(--paper-2); padding: 10px 12p
 .til-nav { display: flex; justify-content: space-between; gap: 12px; padding-top: 14px; }
 .til-nav a { color: var(--muted); text-decoration: none; font-family: var(--font-label); font-weight: 600; font-size: 0.74rem; letter-spacing: 0.09em; text-transform: uppercase; }
 .til-nav a:hover { color: var(--ink); }
+.preview-banner { margin: 12px 0 0; padding: 8px 12px; border: 2px dashed var(--bad); color: var(--bad); font-family: var(--font-label); font-weight: 700; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; }
 </style>
 </head>
 <body>
@@ -359,7 +360,7 @@ pre { margin: 0; overflow-x: auto; background: var(--paper-2); padding: 10px 12p
     <span class="label kicker">How-to · Home network · AirPrint</span>
     <h2 id="hl" class="headline">AirPrint for a Printer That Never Had It</h2>
     <p class="deck">My Epson L3250 doesn’t support AirPrint, so my iPhone can’t see it. One small container on my Synology NAS fixes that. Here’s how it works, and how to set it up for your own printer.</p>
-    <div class="byline"><span class="label">By Maimul</span><span class="label">Research desk: Claude</span><span class="label">9 min read</span></div>
+    <div class="byline"><span class="label">By Maimul</span><span class="label">9 min read</span></div>
   </section>
 
   <!-- At a glance -->
@@ -478,7 +479,7 @@ pre { margin: 0; overflow-x: auto; background: var(--paper-2); padding: 10px 12p
         <text x="675" y="274" text-anchor="middle" class="t-b ok-fill">AirPrint printer: jobs go to the NAS</text>
       </svg>
     </div>
-    <figcaption><b>Same printer, two adverts.</b> The iPhone doesn’t care what’s inside the box, only what the Bonjour advert promises. The relay’s advert makes the two promises the Epson can’t: a <span class="mono">URF</span> key and formats iOS can send.<span class="credit">Graphic: Claude for TIL</span></figcaption>
+    <figcaption><b>Same printer, two adverts.</b> The iPhone doesn’t care what’s inside the box, only what the Bonjour advert promises. The relay’s advert makes the two promises the Epson can’t: a <span class="mono">URF</span> key and formats iOS can send.</figcaption>
   </figure>
       <p class="prose">So the fix isn’t to change the printer. It’s to put something in front of it that makes all four promises honestly, and then keeps them by converting each job into something the printer understands.</p>
     </div>
@@ -540,7 +541,7 @@ pre { margin: 0; overflow-x: auto; background: var(--paper-2); padding: 10px 12p
         <text x="480" y="272" text-anchor="middle" class="t-s">everything in the middle runs in one container, on the NAS’s own network (host networking)</text>
       </svg>
     </div>
-    <figcaption><b>Two jobs, one container.</b> The top path runs once: adding the queue makes the container write an AirPrint advert for it, and Avahi announces it. The bottom path runs for every page: CUPS takes what the iPhone sends and hands the printer only its own language.<span class="credit">Graphic: Claude for TIL</span></figcaption>
+    <figcaption><b>Two jobs, one container.</b> The top path runs once: adding the queue makes the container write an AirPrint advert for it, and Avahi announces it. The bottom path runs for every page: CUPS takes what the iPhone sends and hands the printer only its own language.</figcaption>
   </figure>
     </div>
 

@@ -327,6 +327,7 @@ pre { margin: 0; overflow-x: auto; background: var(--paper-2); padding: 10px 12p
 .til-nav { display: flex; justify-content: space-between; gap: 12px; padding-top: 14px; }
 .til-nav a { color: var(--muted); text-decoration: none; font-family: var(--font-label); font-weight: 600; font-size: 0.74rem; letter-spacing: 0.09em; text-transform: uppercase; }
 .til-nav a:hover { color: var(--ink); }
+.preview-banner { margin: 12px 0 0; padding: 8px 12px; border: 2px dashed var(--bad); color: var(--bad); font-family: var(--font-label); font-weight: 700; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; }
 </style>
 </head>
 <body>
@@ -353,7 +354,7 @@ pre { margin: 0; overflow-x: auto; background: var(--paper-2); padding: 10px 12p
     <span class="label kicker">Case file No. 002 · Home network · AirPrint</span>
     <h2 id="hl" class="headline">The Case of the Printer Nobody Could Reach</h2>
     <p class="deck">My iPhone could see my home printer, but it hadn’t printed a page in 127 days. Here’s how I tracked down why, what finally fixed it, and how to check your own setup when AirPrint goes quiet.</p>
-    <div class="byline"><span class="label">By Maimul</span><span class="label">Research desk: Claude</span><span class="label">14 min read</span></div>
+    <div class="byline"><span class="label">By Maimul</span><span class="label">14 min read</span></div>
   </section>
 
   <!-- At a glance -->
@@ -388,7 +389,7 @@ pre { margin: 0; overflow-x: auto; background: var(--paper-2); padding: 10px 12p
       <p class="label" style="color:var(--muted)">The sequel · No. 001 shows how my NAS gives this printer AirPrint in the first place</p>
       <p class="lead">At 21:03 on a Monday night, my Epson L3250 printed a photo from my iPhone. An ordinary photo. It was the first page my phone had printed since the middle of June.</p>
       <p>For 127 days, nothing had complained. The printer was on. My NAS, which relays my iPhone’s jobs to the printer because the Epson can’t do AirPrint by itself, was running. My phone could even see the printer in its print menu. Every job went in, and nothing came out.</p>
-      <p>I worked it out in one evening, with Claude Code as my pair. It turned out to be five problems stacked on top of each other, and the one at the bottom wasn’t about printing at all. Here’s the trail, dead ends included, and what you can take from each step.</p>
+      <p>I worked it out in one evening. It turned out to be five problems stacked on top of each other, and the one at the bottom wasn’t about printing at all. Here’s the trail, dead ends included, and what you can take from each step.</p>
       <p><b>So where were my jobs going?</b></p>
     </div>
 
@@ -420,7 +421,7 @@ pre { margin: 0; overflow-x: auto; background: var(--paper-2); padding: 10px 12p
       </div>
       <div class="box correction">
         <span class="label">Correction</span>
-        <p>Early on, Claude told me the Epson L3250 supports AirPrint by itself. It doesn’t, and that’s exactly why I run the NAS relay: its own Bonjour advert has no <code>URF</code> key, and it accepts no format an iPhone sends (Exhibit B). Worth remembering when you work with an AI pair: check its claims against what you know.</p>
+        <p>One early theory that evening was that the Epson L3250 supports AirPrint by itself. It doesn’t, and that’s exactly why I run the NAS relay: its own Bonjour advert has no <code>URF</code> key, and it accepts no format an iPhone sends (Exhibit B). Before you build on a claim about what a device supports, read its own advert.</p>
       </div>
     </aside>
 
@@ -526,7 +527,7 @@ pre { margin: 0; overflow-x: auto; background: var(--paper-2); padding: 10px 12p
         <text x="460" y="56" text-anchor="middle" class="t-b">② “That’s me: 10.0.0.5 and 10.0.0.6”</text>
       </svg>
     </div>
-    <figcaption><b>One question, one answer.</b> The question reaches every device on the segment; only the device that owns <span class="mono">nas.local</span> replies. Your NAS answers with two addresses because it has two network ports.<span class="credit">Graphic: Claude for TIL</span></figcaption>
+    <figcaption><b>One question, one answer.</b> The question reaches every device on the segment; only the device that owns <span class="mono">nas.local</span> replies. Your NAS answers with two addresses because it has two network ports.</figcaption>
   </figure>
     </div>
 
@@ -587,7 +588,7 @@ pre { margin: 0; overflow-x: auto; background: var(--paper-2); padding: 10px 12p
         <text x="480" y="240" text-anchor="middle" class="t-s">then the iPhone opens http://10.0.0.5:631/printers/EPSON_L3250 and sends the job over IPP</text>
       </svg>
     </div>
-    <figcaption><b>Each record answers one question.</b> The SRV record names a host instead of an IP, which is why the A record matters so much: if nobody publishes an address for <span class="mono">nas.local</span>, the chain breaks at step 4 even though the printer still shows up in the list from step 1.<span class="credit">Graphic: Claude for TIL</span></figcaption>
+    <figcaption><b>Each record answers one question.</b> The SRV record names a host instead of an IP, which is why the A record matters so much: if nobody publishes an address for <span class="mono">nas.local</span>, the chain breaks at step 4 even though the printer still shows up in the list from step 1.</figcaption>
   </figure>
       <h3 style="padding-top:8px">Why my Epson needed an accomplice</h3>
       <p class="prose">Showing up in the list isn’t enough. iOS also checks for the <code>_universal</code> subtype, a <code>URF</code> key in the TXT record, and a document format it can send. On its own, my Epson fails two of the four checks, so the iPhone leaves it out of the print menu. The NAS relay passes all four. If your printer isn’t AirPrint, this is how you give it AirPrint.</p>
@@ -650,7 +651,7 @@ pre { margin: 0; overflow-x: auto; background: var(--paper-2); padding: 10px 12p
         <text x="610" y="374" text-anchor="middle" class="t-b">ended as nas-67</text>
       </svg>
     </div>
-    <figcaption><b>Two honest daemons, one name, different answers.</b> Neither was broken; each was following the probing rule correctly. The printer advert ended up pointing at a host name that nobody was publishing an address for, so your iPhone could list the printer but could not connect to it. It also explains why <span class="mono">nas.local</span> stopped resolving from your Mac.<span class="credit">Graphic: Claude for TIL</span></figcaption>
+    <figcaption><b>Two honest daemons, one name, different answers.</b> Neither was broken; each was following the probing rule correctly. The printer advert ended up pointing at a host name that nobody was publishing an address for, so your iPhone could list the printer but could not connect to it. It also explains why <span class="mono">nas.local</span> stopped resolving from your Mac.</figcaption>
   </figure>
     </div>
 
@@ -715,7 +716,7 @@ publish-workstation=no</pre>
         <text x="676" y="276" text-anchor="middle" class="t-s">printer records point at DSM’s name: no conflict</text>
       </svg>
     </div>
-    <figcaption><b>The difference is one record.</b> Only the container’s A record moves: it disappears, and the SRV record that used to point at the contested name now points at the one DSM answers for.<span class="credit">Graphic: Claude for TIL</span></figcaption>
+    <figcaption><b>The difference is one record.</b> Only the container’s A record moves: it disappears, and the SRV record that used to point at the contested name now points at the one DSM answers for.</figcaption>
   </figure>
     </div>
 
@@ -765,7 +766,7 @@ publish-workstation=no</pre>
         <text x="335" y="222" class="t-s">not used any more: it crashed on every job inside the Alpine container</text>
       </svg>
     </div>
-    <figcaption><b>Bonjour is only the first hop.</b> The dashed blue path happens once, when the print menu opens. The solid path carries the actual job.<span class="credit">Graphic: Claude for TIL</span></figcaption>
+    <figcaption><b>Bonjour is only the first hop.</b> The dashed blue path happens once, when the print menu opens. The solid path carries the actual job.</figcaption>
   </figure>
       <div class="obit">
         <span class="label">Obituary</span>
