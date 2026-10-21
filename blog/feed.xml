@@ -6,7 +6,21 @@
   <atom:link href="https://maimul.github.io/blog/feed.xml" rel="self" type="application/rss+xml"/>
   <description>One thing I learned, written up like a newspaper feature.</description>
   <language>en</language>
-  <lastBuildDate>Mon, 19 Oct 2026 09:00:00 +0800</lastBuildDate>
+  <lastBuildDate>Wed, 21 Oct 2026 09:00:00 +0800</lastBuildDate>
+  <item>
+    <title>Every Test Passed. Production Returned 500.</title>
+    <link>https://maimul.github.io/blog/003-every-test-passed-production-500/</link>
+    <guid isPermaLink="true">https://maimul.github.io/blog/003-every-test-passed-production-500/</guid>
+    <pubDate>Wed, 21 Oct 2026 09:00:00 +0800</pubDate>
+    <description>My test suite was green, my smoke test was green, and a photo upload in a FastAPI app I work on had never worked. Here&#x27;s the Python behaviour that hid it, the test that now catches it, and why fixing the bug still didn&#x27;t fix the feature.</description>
+    <category>python</category>
+    <category>imports</category>
+    <category>fastapi</category>
+    <category>testing</category>
+    <category>ci</category>
+    <category>kubernetes</category>
+    <category>sqlalchemy</category>
+  </item>
   <item>
     <title>The Case of the Printer Nobody Could Reach</title>
     <link>https://maimul.github.io/blog/002-bonjour-avahi-nas-printer/</link>
