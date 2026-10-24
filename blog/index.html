@@ -13,7 +13,7 @@
 <meta property="og:title" content="Today I Learned">
 <meta property="og:description" content="One thing I learned, written up like a newspaper feature. By Maimul.">
 <meta property="og:url" content="https://maimul.github.io/blog/">
-<meta property="og:image" content="https://maimul.github.io/blog/003-every-test-passed-production-500/cover.png">
+<meta property="og:image" content="https://maimul.github.io/blog/004-green-gate-red-commit/cover.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=Archivo+Narrow:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
@@ -354,13 +354,13 @@ pre { margin: 0; overflow-x: auto; background: var(--paper-2); padding: 10px 12p
   <nav class="til-nav" aria-label="Site"><a href="../">← maimul.github.io</a><a href="feed.xml">RSS</a></nav>
   <header class="nameplate">
     <div class="earline">
-      <span class="label">Vol. 1 · 3 issues</span>
+      <span class="label">Vol. 1 · 4 issues</span>
       <span class="label">Maimul’s notebook</span>
     </div>
     <h1 class="title">Today <span class="title-i">I</span> Learned</h1>
     <p class="motto">All the bugs that are fit to print</p>
     <div class="dateline">
-      <span class="label">Latest: Wednesday, 21 October 2026</span>
+      <span class="label">Latest: Saturday, 24 October 2026</span>
       <span class="label">Home lab · cloud · infrastructure</span>
       <span class="label">Free to read</span>
     </div>
@@ -368,18 +368,19 @@ pre { margin: 0; overflow-x: auto; background: var(--paper-2); padding: 10px 12p
 
   <main>
     <article class="lead-story" aria-labelledby="lead-h">
-      <a class="lead-cover" href="003-every-test-passed-production-500/" tabindex="-1" aria-hidden="true"><img src="003-every-test-passed-production-500/cover.png" width="1200" height="630" alt=""></a>
+      <a class="lead-cover" href="004-green-gate-red-commit/" tabindex="-1" aria-hidden="true"><img src="004-green-gate-red-commit/cover.png" width="1200" height="630" alt=""></a>
       <div class="lead-copy">
-        <span class="label kicker">No. 003 · python · imports · fastapi · testing</span>
-        <h2 id="lead-h" class="lead-head"><a href="003-every-test-passed-production-500/">Every Test Passed. Production Returned 500.</a></h2>
-        <p class="deck">My test suite was green, my smoke test was green, and a photo upload in a FastAPI app I work on had never worked. Here&#x27;s the Python behaviour that hid it, the test that now catches it, and why fixing the bug still didn&#x27;t fix the feature.</p>
-        <div class="lead-learn"><span class="label">What you’ll learn</span><ul><li>Why Python checks an import inside a function only when that line runs, and a ten-line experiment that proves it.</li><li>A short pytest test that walks every import with `ast`, function bodies included, and names the file that broke.</li><li>How to check the image you ship, not just the virtualenv you test in.</li><li>Why one fix didn&#x27;t make the feature work: three more defects no unit test could see, and the check for each.</li></ul></div>
-        <span class="label">Wednesday, 21 October 2026 · <a class="read" href="003-every-test-passed-production-500/">Read the issue →</a></span>
+        <span class="label kicker">No. 004 · claude-code · git-hooks · ai-coding-agents · ci</span>
+        <h2 id="lead-h" class="lead-head"><a href="004-green-gate-red-commit/">The Green Gate That Let a Red Commit Through</a></h2>
+        <p class="deck">My AI coding agent committed on a failed preflight, and the Claude Code hook built to stop exactly that said nothing. The finding filed that night blamed the wrong line. Here&#x27;s the flight-recorder replay that found the real cause, and a commit gate you can copy that fails closed.</p>
+        <div class="lead-learn"><span class="label">What you’ll learn</span><ul><li>Which exit code actually blocks a Claude Code hook, and why a hook that crashes lets the command run.</li><li>How a few apostrophes can turn `git commit` into &quot;not a commit&quot; for a shell-style parser.</li><li>A copy-paste commit gate that fails closed, and four tests that prove it.</li><li>Why you replay an incident with the exact input, not a tidied-up copy.</li></ul></div>
+        <span class="label">Saturday, 24 October 2026 · <a class="read" href="004-green-gate-red-commit/">Read the issue →</a></span>
       </div>
     </article>
     <section class="earlier" aria-labelledby="earlier-h">
       <h2 id="earlier-h" class="label">Earlier editions</h2>
       <ol class="issues">
+      <li><span class="label">No. 003 · 21 Oct 2026</span><h3 class="issue-head"><a href="003-every-test-passed-production-500/">Every Test Passed. Production Returned 500.</a></h3><p>My test suite was green, my smoke test was green, and a photo upload in a FastAPI app I work on had never worked. Here&#x27;s the Python behaviour that hid it, the test that now catches it, and why fixing the bug still didn&#x27;t fix the feature.</p><span class="label">Related to: python · imports · fastapi · testing</span></li>
       <li><span class="label">No. 002 · 19 Oct 2026</span><h3 class="issue-head"><a href="002-bonjour-avahi-nas-printer/">The Case of the Printer Nobody Could Reach</a></h3><p>My iPhone could see my home printer, but it hadn&#x27;t printed a page in 127 days. Here&#x27;s how I tracked down why, what finally fixed it, and how to check your own setup when AirPrint goes quiet.</p><span class="label">Related to: bonjour · mdns · avahi · airprint</span></li>
       <li><span class="label">No. 001 · 19 Oct 2026</span><h3 class="issue-head"><a href="001-airprint-for-any-printer/">AirPrint for a Printer That Never Had It</a></h3><p>My Epson L3250 doesn&#x27;t support AirPrint, so my iPhone can&#x27;t see it. One small container on my Synology NAS fixes that. Here&#x27;s how it works, and how to set it up for your own printer.</p><span class="label">Related to: airprint · cups · avahi · bonjour</span></li>
       </ol>
