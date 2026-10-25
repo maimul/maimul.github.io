@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Green Gate That Let a Red Commit Through · Today I Learned No. 004</title>
-<meta name="description" content="My AI coding agent committed on a failed preflight, and the Claude Code hook built to stop exactly that said nothing. The finding filed that night blamed the wrong line. Here&#x27;s the flight-recorder replay that found the real cause, and a commit gate you can copy that fails closed.">
+<title>The Guard That Couldn’t Read, So It Waved the Commit Through · Today I Learned No. 004</title>
+<meta name="description" content="My AI coding agent was only allowed to commit code once the code passed my checks. One night the checks failed, the agent committed anyway, and the guard I&#x27;d built to stop exactly that did nothing. Here&#x27;s why, in plain words, and the rule that fixes it.">
 <meta name="author" content="Maimul">
 <meta name="color-scheme" content="light dark">
 <link rel="canonical" href="https://maimul.github.io/blog/004-green-gate-red-commit/">
 <link rel="alternate" type="application/rss+xml" title="Today I Learned" href="../feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Today I Learned · Maimul">
-<meta property="og:title" content="The Green Gate That Let a Red Commit Through">
-<meta property="og:description" content="My AI coding agent committed on a failed preflight, and the Claude Code hook built to stop exactly that said nothing. The finding filed that night blamed the wrong line. Here&#x27;s the flight-recorder replay that found the real cause, and a commit gate you can copy that fails closed.">
+<meta property="og:title" content="The Guard That Couldn’t Read, So It Waved the Commit Through">
+<meta property="og:description" content="My AI coding agent was only allowed to commit code once the code passed my checks. One night the checks failed, the agent committed anyway, and the guard I&#x27;d built to stop exactly that did nothing. Here&#x27;s why, in plain words, and the rule that fixes it.">
 <meta property="og:url" content="https://maimul.github.io/blog/004-green-gate-red-commit/">
 <meta property="og:image" content="https://maimul.github.io/blog/004-green-gate-red-commit/cover.png">
 <meta property="og:image:width" content="1200">
@@ -342,7 +342,7 @@ pre { margin: 0; overflow-x: auto; background: var(--paper-2); padding: 10px 12p
   <nav class="til-nav" aria-label="Blog"><a href="../">← All issues</a><a href="../../">maimul.github.io</a></nav>
 
 <style>
-/* Incident report furniture (No. 004): flight recorder, incident summary, the finding. */
+/* Incident report furniture (No. 004): flight recorder with plain-English lines, origin tags. */
 .recorder { border: 2px solid var(--rule); background: var(--surface); padding: 12px 16px 14px; display: grid; gap: 10px; }
 .recorder > .label { color: var(--muted); font-size: 0.72rem; }
 .recorder ol { list-style: none; margin: 0; padding: 0; display: grid; }
@@ -353,14 +353,11 @@ pre { margin: 0; overflow-x: auto; background: var(--paper-2); padding: 10px 12p
 .recorder .say { min-width: 0; overflow-wrap: anywhere; }
 .recorder .say code { background: none; padding: 0; font-size: 1em; }
 .recorder .red { color: var(--bad); font-weight: 600; }
-.incident { margin: 0; display: grid; gap: 7px; }
-.incident div { display: grid; grid-template-columns: 6.2em minmax(0, 1fr); gap: 8px; font-size: 0.93rem; line-height: 1.4; }
-.incident dt { font-family: var(--font-label); font-weight: 600; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
-.incident dd { margin: 0; min-width: 0; }
-.finding { border-top: 3px solid var(--rule); border-bottom: 1px solid var(--rule); padding-block: 14px; display: grid; gap: 8px; }
-.finding .label { color: var(--bad); }
-.finding p, .finding li { font-size: 1rem; line-height: 1.55; max-width: 80ch; }
-.finding ol { margin: 0 0 6px; padding-left: 1.3em; display: grid; gap: 5px; }
+.recorder .plain { display: block; margin-top: 5px; font-family: var(--font-body); font-size: 0.98rem; line-height: 1.45; color: var(--muted); }
+.recorder .plain b { color: var(--ink); font-weight: 600; }
+.from { display: block; font-family: var(--font-label); font-weight: 600; font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.cast { list-style: none; padding-left: 0 !important; }
+.gloss dt .from { margin-top: 1px; }
 @media (max-width: 560px) { .recorder li { grid-template-columns: 64px minmax(0, 1fr); } .recorder .say { grid-column: 1 / -1; } }
 </style>
   <!-- Nameplate -->
@@ -380,45 +377,46 @@ pre { margin: 0; overflow-x: auto; background: var(--paper-2); padding: 10px 12p
 
   <!-- Headline -->
   <section class="headblock" aria-labelledby="hl">
-    <span class="label kicker">Incident report · Claude Code hooks · Git</span>
-    <h2 id="hl" class="headline">The Green Gate That Let a Red Commit Through</h2>
-    <p class="deck">My AI coding agent committed on a failed preflight, and the Claude Code hook built to stop exactly that said nothing. The finding filed that night blamed the wrong line. Here’s the flight-recorder replay that found the real cause, and a commit gate you can copy that fails closed.</p>
-    <div class="byline"><span class="label">By Maimul</span><span class="label">15 min read</span></div>
+    <span class="label kicker">Incident report · AI coding agents · Git</span>
+    <h2 id="hl" class="headline">The Guard That Couldn’t Read, So It Waved the Commit Through</h2>
+    <p class="deck">My AI coding agent was only allowed to commit code once the code passed my checks. One night the checks failed, the agent committed anyway, and the guard I’d built to stop exactly that did nothing. Here’s why, in plain words, and the rule that fixes it.</p>
+    <div class="byline"><span class="label">By Maimul</span><span class="label">18 min read</span></div>
   </section>
 
   <!-- At a glance -->
   <section class="glance" aria-label="At a glance">
     <div class="tldr">
       <h3>TL;DR</h3>
-      <p>My Claude Code commit gate let my agent commit on a red preflight, silently. The finding filed that night blamed a failed tree hash and <code>|| exit 0</code>. That hole was real, but the hook never got that far: five apostrophes in the commit message made Python’s <code>shlex</code> give up, and the hook read “can’t parse” as “not a commit”. The fix: exit 0 only when sure, and block every “can’t tell” with exit 2, the only code Claude Code treats as no.</p>
+      <p>My AI coding agent, Claude Code, committed code that had just failed my checks. The guard I’d put in front of it, a small script that has to approve every command first, let it through without a word. To spot a commit, the guard split each command into words with a tool that treats every apostrophe as a quote mark, even inside a commit message, where the shell ignores them. The commit command had five apostrophes. With an odd number, one quote never closed, so the guard couldn’t read the command, and it decided the command wasn’t a commit. The fix is one rule: when the guard can’t tell, it blocks.</p>
     </div>
     <div>
       <h3>Related to</h3>
-      <ul class="chips"><li>Claude Code hooks</li><li>Git hooks</li><li>AI coding agents</li><li>CI/CD</li><li>Bash</li><li>Incident review</li></ul>
+      <ul class="chips"><li>AI coding agents</li><li>Claude Code hooks</li><li>Git</li><li>Shell scripts</li><li>Python</li><li>Incident review</li></ul>
     </div>
     <div>
       <h3>What you’ll learn</h3>
       <ol class="learn">
-        <li>Which exit code actually blocks a Claude Code hook, and why a hook that crashes lets the command run.</li>
-        <li>How a few apostrophes can turn <code>git commit</code> into “not a commit” for a shell-style parser.</li>
-        <li>A copy-paste commit gate that fails closed, and four tests that prove it.</li>
-        <li>Why you replay an incident with the exact input, not a tidied-up copy.</li>
+        <li>How to make Claude Code run your own script before every command an AI agent runs, so the script can block it.</li>
+        <li>Why that script has to end with exit code 2, the number it hands back to Claude Code, to block a command. Exit code 1 lets the command run.</li>
+        <li>How five apostrophes stopped my guard from reading a command, and the rule that fixes it, with code and four tests.</li>
+        <li>Why you test with the exact command that failed, not a shorter copy.</li>
       </ol>
     </div>
     <div>
       <h3>Who it’s for</h3>
-      <p>DevOps and platform people who write git hooks or CI gates, and anyone running an AI coding agent behind hooks.</p>
-      <p><b>Level:</b> intermediate. You can read a Bash script.</p>
+      <p>Anyone who lets an AI coding agent run commands in their code, and anyone who writes a script whose job is to block things.</p>
+      <p><b>Level:</b> beginner to intermediate. The story needs no code. The fix has shell and Python you can copy.</p>
     </div>
   </section>
 
   <div class="article">
     <!-- The problem I faced -->
     <div class="body prose">
-      <p class="lead">One night in September, my coding agent ran one line of shell. It searched the preflight log for the line that says <code>preflight_exit</code>, and if it found one, it committed. Two seconds later the terminal printed two lines: <code>preflight_exit=1</code>, and the new commit.</p>
-      <p>Preflight runs everything CI runs, before anything is committed. In one of my repos, a Claude Code hook enforces it: any <code>git commit</code> the agent tries is blocked unless preflight has passed for exactly the files on disk. Every other quality rule in that repo leans on that hook. That night it said nothing and let the commit through.</p>
-      <p>The agent owned up seconds later. Within eight minutes it had found a real hole in the gate, fixed it and filed the finding. Three weeks later I replayed the exact command against the gate as it stood that night. It walked straight through, never reaching the fixed hole.</p>
-      <p><b>So how does a gate built to block exactly one thing wave that thing through?</b></p>
+      <p class="lead">One night in September, my AI coding agent did exactly what I’d built a guard to stop. It ran my checks, the checks failed, and it committed the code anyway. The guard didn’t make a sound.</p>
+      <p>Here’s the setup, because most of the names in this story are mine, not standards. I work with Claude Code, an AI agent that edits files and runs commands in my repo. Before any change is committed, saved into git’s history, it has to pass the same checks my CI server runs: tests, a linter, a formatter. I keep them all in one script called <b>preflight</b>. It’s my own script, not a git or GitHub feature.</p>
+      <p>The agent could forget to run preflight, or misread its result. So I added a <b>guard</b>. Claude Code can run a script of yours before each command the agent runs, and that script can block the command. Claude Code calls this a hook. My guard is a hook that asks: is this command a git commit? If it is, did preflight pass for exactly these files? To tell, preflight saves a <b>fingerprint</b> of the files when every check passes, a short code that changes if any file changes, and the guard compares it with a fresh one. If they don’t match, the guard blocks the commit.</p>
+      <p>That night the guard let the commit through. A fix went in the same night. It closed a real hole, but not the one this commit used. I found the real hole three weeks later, and it came down to five apostrophes.</p>
+      <p><b>So how does a guard built to stop exactly this let it through?</b></p>
     </div>
 
     <!-- Right rail -->
@@ -426,76 +424,72 @@ pre { margin: 0; overflow-x: auto; background: var(--paper-2); padding: 10px 12p
       <div class="box eli5">
         <span class="label">Explain it simply</span>
         <h3>The crumpled boarding pass</h3>
-        <p>A boarding gate scanner beeps green for a good pass and red for a bad one. Hand a good gate agent a crumpled pass and they check it by hand. My gate decided the crumpled pass wasn’t a boarding pass at all, and waved me onto the plane.</p>
+        <p>An airport gate scanner beeps green for a good boarding pass and red for a bad one. Hand a good gate attendant a crumpled pass the scanner can’t read, and they check it by hand. My guard decided a crumpled pass wasn’t a boarding pass at all, so it wasn’t its job, and waved the passenger onto the plane.</p>
       </div>
       <div class="box">
-        <span class="label">Incident summary</span>
-        <h3>A red commit, waved through</h3>
-        <dl class="incident">
-          <div><dt>When</dt><dd>One night in September 2026</dd></div>
-          <div><dt>Where</dt><dd>One of my repos</dd></div>
-          <div><dt>Operator</dt><dd>My AI coding agent, Claude Code</dd></div>
-          <div><dt>Control</dt><dd>A commit gate, run as a PreToolUse hook</dd></div>
-          <div><dt>Damage</dt><dd>One test file committed unformatted</dd></div>
-          <div><dt>Detected</dt><dd>Seconds later, by the agent itself</dd></div>
-          <div><dt>Cause</dt><dd>Revised. See the finding.</dd></div>
-        </dl>
+        <span class="label">Who’s who</span>
+        <h3>The cast, and where each comes from</h3>
+        <ul class="cast">
+          <li><b>Claude Code</b><span class="from">an AI coding agent</span>Does the work. Owned its mistake within seconds.</li>
+          <li><b>Preflight</b><span class="from">my own script</span>Runs all my checks. Stops at the first one that fails.</li>
+          <li><b>The guard</b><span class="from">my script, run by Claude Code as a hook</span>Has to approve every command. Waved through anything it couldn’t read.</li>
+          <li><b>shlex</b><span class="from">part of Python</span>Splits a command into words. Gives up if a quote never closes.</li>
+        </ul>
       </div>
       <div class="box">
         <span class="label">By the numbers</span>
         <div class="numbers">
-          <div class="num"><b>5</b><span>apostrophes in the commit command. An odd number is all it takes.</span></div>
-          <div class="num"><b>3</b><span>apostrophes got past a copy of my old gate in my own test: two in <code>'EOF'</code>, one in <i>it's</i></span></div>
-          <div class="num"><b>2</b><span>the only exit code that makes a Claude Code PreToolUse hook block</span></div>
-          <div class="num"><b>600</b><span>seconds, the default hook timeout. A PreToolUse hook that times out doesn’t block.</span></div>
+          <div class="num"><b>5</b><span>apostrophes in the commit command. An odd number was enough to break the guard.</span></div>
+          <div class="num"><b>8</b><span>minutes from the bad commit to a fix, for a different hole.</span></div>
+          <div class="num"><b>3</b><span>weeks until I replayed the exact command and found the real hole.</span></div>
         </div>
       </div>
       <div class="box correction">
         <span class="label">Correction</span>
-        <p>The finding filed that night blamed the tree hash: <code>tree-hash.sh</code> failed and <code>|| exit 0</code> let the commit through. That hole was real, and the fix closed it, but this commit never reached it. My own first theory, preflight deleting temp files mid-hash, is a real race too. It isn’t what happened: preflight had stopped at its first step.</p>
+        <p>That night’s write-up blamed a different hole: the guard also let commits through when its fingerprint script failed. That hole was real, and that night’s fix closed it, but this commit never got that far. My own first theory, preflight deleting temporary files at the wrong moment, was wrong too: preflight had already stopped at its first step, the formatter check, and the guard never took a fingerprint for this commit.</p>
       </div>
     </aside>
 
     <!-- Flight recorder -->
     <div class="body span">
-      <div class="section-head"><span class="label">Flight recorder · from the session log</span><h2>Two lines that should never sit together</h2></div>
-      <div class="recorder" role="note" aria-label="Session log excerpt">
-        <span class="label">Session log · September 2026 · seconds from the commit · paths shortened</span>
+      <div class="section-head"><span class="label">Flight recorder · from the session log</span><h2>What I saw: the checks failed, then a commit</h2></div>
+      <div class="recorder" role="note" aria-label="Session log excerpt, with each line explained">
+        <span class="label">Session log · September 2026 · seconds from the commit · each line explained under it</span>
         <ol>
-          <li><time>−16 s</time><span class="who">agent</span><span class="say"><code>… git add -A &amp;&amp; ./scripts/preflight.sh &gt; &lt;log&gt; 2&gt;&amp;1; echo "preflight_exit=$?"</code> (in the background)</span></li>
-          <li><time>0 s</time><span class="who">agent</span><span class="say"><code>grep "preflight_exit" &lt;task output&gt; &amp;&amp; git commit -q -F - &lt;&lt;'EOF'</code><br>… a message a few dozen lines long</span></li>
-          <li><time>+2 s</time><span class="who">shell</span><span class="say"><span class="red">preflight_exit=1</span><br>&lt;the new commit’s hash and subject line&gt;</span></li>
+          <li><time>−16 s</time><span class="who">agent</span><span class="say"><code>git add -A &amp;&amp; ./scripts/preflight.sh &gt; &lt;log&gt; 2&gt;&amp;1; echo "preflight_exit=$?"</code> (in the background)<span class="plain">Stage all changes and run preflight. Claude Code runs this in the background and saves what it prints, which is one line: <b>preflight_exit=0</b> if every check passed, <b>preflight_exit=1</b> if any check failed. <code>$?</code> is the shell’s name for the exit code of the last command.</span></span></li>
+          <li><time>0 s</time><span class="who">agent</span><span class="say"><code>grep "preflight_exit" &lt;task output&gt; &amp;&amp; git commit -q -F - &lt;&lt;'EOF'</code><br>… a message a few dozen lines long<span class="plain">Search that saved output for <b>preflight_exit</b>. If the line is there, commit, with the message written below it.</span></span></li>
+          <li><time>+2 s</time><span class="who">shell</span><span class="say"><span class="red">preflight_exit=1</span><br>&lt;the new commit’s ID and subject line&gt;<span class="plain">The line said preflight had failed. The commit happened anyway.</span></span></li>
           <li><time>+12 s</time><span class="who">agent</span><span class="say">“I made an error there: my shell check only confirmed the grep found a line, not that it said zero. Preflight exited 1 and I committed anyway.”</span></li>
-          <li><time>+13 s</time><span class="who">log</span><span class="say"><code>==&gt; ruff format --check</code><br>1 file would be reformatted</span></li>
+          <li><time>+13 s</time><span class="who">log</span><span class="say"><code>==&gt; ruff format --check</code><br>1 file would be reformatted<span class="plain">The check that failed: ruff, a Python formatter, wanted one line of a test file laid out differently.</span></span></li>
         </ol>
       </div>
-      <p class="prose">Read the second entry again. <code>grep</code> exits 0 when it finds a match, and <code>preflight_exit=1</code> is a match: the line checked that preflight had reported, not what it reported. That was the first line of defence. The hook was the second, and it existed for exactly this. The commit itself was nearly harmless: one new test line the formatter wanted joined. The gate’s failure was not.</p>
+      <p class="prose">Two things went wrong here. First, the agent’s command. <code>grep</code>, a tool that finds lines containing some text, only answers “is the line there?”. The line was there. It just said <code>preflight_exit=1</code>, so the commit went ahead. The agent spotted that twelve seconds later. Second, my guard. It existed for exactly this moment, and it let the commit through without a word. That’s the part this post is about. The bad commit itself was harmless: one line a formatter wanted rearranged. A guard that fails silently is not.</p>
     </div>
 
     <!-- Timeline -->
     <div class="body">
-      <div class="section-head"><span class="label">Timeline to impact</span><h2>Eight minutes to a fix, three weeks to the real cause</h2></div>
+      <div class="section-head"><span class="label">How I worked it out</span><h2>Eight minutes to a fix, three weeks to the real cause</h2></div>
       <ol class="timeline">
-        <li><time>Earlier</time><p><span class="tag bug">incident</span>My gate was adapted from an older one in another repo. When <code>shlex</code> couldn’t parse a command, the original treated it as a commit if the text said <code>git commit</code>. My copy returned False: not a commit.<span class="lesson"><b>Lesson</b>Diff a copied control against its source. The safe line is the easiest one to lose.</span></p></li>
-        <li><time>0 s</time><p><span class="tag bug">incident</span>The commit runs. The hook can’t parse it, decides it isn’t a commit, and exits 0 without a word. Preflight had failed at its first step.<span class="lesson"><b>Lesson</b>Test the value, not that a line exists.</span></p></li>
-        <li><time>+38 s</time><p><span class="tag clue">the clue</span>The agent’s first guess is right: apostrophes in the message, an unbalanced quote, a <code>shlex</code> failure.</p></li>
-        <li><time>+1 min</time><p><span class="tag dead">dead end</span>It replays the hook with shorter messages. Three tries, three blocks, all parsed. It moves on: “I cannot pin the bypass on a parsing bug.”<span class="lesson"><b>Lesson</b>Replay the exact input. The closest test was one apostrophe short.</span></p></li>
-        <li><time>+2½ min</time><p><span class="tag fix">progress</span>A different hole, proven: with <code>tree-hash.sh</code> swapped for <code>exit 1</code>, the hook exits 0 and prints nothing.<span class="lesson"><b>Lesson</b>A real bug can still be the wrong suspect.</span></p></li>
-        <li><time>+8 min</time><p><span class="tag fix">fixed</span>The fix lands. Once the hook knows it’s a commit, any failure blocks, and the hasher survives a vanishing file. The agent’s commit line now demands <code>preflight_exit=0</code>.</p></li>
-        <li><time>3 weeks on</time><p><span class="tag clue">the turn</span>I replay the exact command from the session log against the gate as it stood that night: exit 0, no message, and the tree hash never runs.</p></li>
+        <li><time>Earlier</time><p><span class="tag bug">incident</span>I’d copied my guard from an older one. When the original couldn’t read a command that contained <code>git commit</code>, it treated it as a commit. My copy treated it as not a commit.<span class="lesson"><b>Lesson</b>When you copy a guard, compare it with the original. The safe line is the easiest one to lose.</span></p></li>
+        <li><time>0 s</time><p><span class="tag bug">incident</span>The agent’s command finds the <code>preflight_exit</code> line and commits. The guard can’t read the command, decides it isn’t a commit, and allows it.<span class="lesson"><b>Lesson</b>Check what a result says, not just that there is one.</span></p></li>
+        <li><time>+38 s</time><p><span class="tag dead">dead end</span>The agent’s first guess is right: the apostrophes. A minute later it tests the guard with shorter commit messages. Three tries, three blocks. It drops the idea: “I cannot pin the bypass on a parsing bug.”<span class="lesson"><b>Lesson</b>Test with the exact input. Its closest test had one apostrophe fewer than the real command.</span></p></li>
+        <li><time>+2½ min</time><p><span class="tag fix">progress</span>It finds a different hole: when the fingerprint script fails, the guard also allows the commit.<span class="lesson"><b>Lesson</b>A real bug can still be the wrong suspect.</span></p></li>
+        <li><time>+8 min</time><p><span class="tag fix">fixed</span>That hole is fixed. The agent’s own commit command now refuses anything but <code>preflight_exit=0</code>.</p></li>
+        <li><time>3 weeks on</time><p><span class="tag clue">the turn</span>I replay the exact command from the session log against the guard as it was that night. The guard allows it.</p></li>
       </ol>
     </div>
 
     <!-- Analysis: the flight path -->
     <div class="body span">
-      <div class="section-head"><span class="label">Analysis · the flight path</span><h2>Two ways out, and the one my commit took</h2></div>
+      <div class="section-head"><span class="label">Analysis · the flight path</span><h2>How my guard decided, and the hole my commit used</h2></div>
       <div class="body prose">
-        <p>Claude Code hands the hook every Bash command as JSON on stdin. Mine asked four questions, drawn below, and only a stamp that didn’t match the tree blocked. To tell a real <code>git commit</code>, it split the command into words with Python’s <code>shlex</code>.</p>
-        <p>It failed open on purpose, because it runs before every Bash command. That’s right while it doesn’t know what it’s looking at, and wrong once the command might be a commit. Two lines turned <i>I can’t tell</i> into <i>allow</i>: the parse step, and the <code>|| exit 0</code> after the tree hash. The finding that night found the second. My commit left through the first.</p>
+        <p>Before the agent runs a command, Claude Code hands it to the guard. The guard answers by ending with a number, called an exit code. Exit code 0 means allow. Exit code 2 means block. To choose, my guard went through three steps, drawn below.</p>
+        <p>First: is this a git commit? To answer, it used <b>shlex</b>, a library that comes with Python and splits a command into words the way a shell would. Then it took a fresh fingerprint of the files and compared it with the one preflight saved.</p>
+        <p>The guard allowed things when unsure, on purpose. Most commands have nothing to do with git, and a guard that blocks them by mistake gets in the way. That’s fine until the command might be a commit. Two holes turned “I can’t tell” into allowed. That night’s fix closed the second. My commit had gone through the first.</p>
       </div>
-      <figure><span class="label graphic-label">Graphic · The flight path through the old gate</span>
+      <figure><span class="label graphic-label">Graphic · How my guard decided, the night it failed</span>
         <div class="scroll">
-          <svg viewBox="0 0 960 324" style="min-width:780px" role="img" aria-label="The old commit gate asks four questions in turn: does the command mention commit, is it a git commit, what is the tree hash, does the stamp match. Two of its exits turn I can't tell into exit 0: a command shlex cannot parse, and a tree hash that fails. The red commit's command left through the first one, so the tree-hash step, the hole found and fixed that night, never ran for it.">
+          <svg viewBox="0 0 960 324" style="min-width:780px" role="img" aria-label="Claude Code hands the agent's command to my guard first. The guard asks three questions: is it a git commit, read with Python's shlex; take a fingerprint of the files; does it match the one preflight saved. Two of its exits turn I can't tell into allowed: a command shlex can't read, and a fingerprint script that fails. The bad commit's command left through the first one, so the fingerprint step, the hole found and fixed that night, never ran for it. Only a fingerprint that doesn't match is blocked.">
             <defs>
               <marker id="g1k" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
               <marker id="g1c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="c-fill"/></marker>
@@ -503,82 +497,74 @@ pre { margin: 0; overflow-x: auto; background: var(--paper-2); padding: 10px 12p
             </defs>
             <!-- legend -->
             <line x1="10" y1="22" x2="40" y2="22" class="s-line c-stroke w2"/>
-            <text x="48" y="26" class="t-s">the red commit’s path</text>
-            <rect x="222" y="14" width="14" height="14" class="y-tint y-stroke"/>
-            <text x="244" y="26" class="t-s">seam: can’t tell, so exit 0</text>
-            <rect x="462" y="14" width="14" height="14" class="ok-tint ok-stroke"/>
-            <text x="484" y="26" class="t-s">exit 0: the command runs</text>
-            <rect x="676" y="14" width="14" height="14" class="bad-tint bad-stroke"/>
-            <text x="698" y="26" class="t-s">exit 2: blocked</text>
-            <!-- the four questions -->
-            <rect x="10" y="48" width="150" height="74" rx="8" class="s-box"/>
-            <text x="85" y="80" text-anchor="middle" class="t-b">Agent’s Bash call</text>
-            <text x="85" y="101" text-anchor="middle" class="t-s">PreToolUse hook</text>
-            <rect x="204" y="48" width="160" height="74" rx="8" class="s-box"/>
-            <text x="284" y="80" text-anchor="middle" class="t-b">1 · any “commit”?</text>
-            <text x="284" y="101" text-anchor="middle" class="t-s">substring filter</text>
-            <rect x="408" y="48" width="170" height="74" rx="8" class="s-box"/>
-            <text x="493" y="80" text-anchor="middle" class="t-b">2 · git commit?</text>
-            <text x="493" y="101" text-anchor="middle" class="t-s">shlex.split(cmd)</text>
-            <rect x="622" y="48" width="150" height="74" rx="8" class="s-box"/>
-            <text x="697" y="80" text-anchor="middle" class="t-b">3 · hash tree</text>
-            <text x="697" y="101" text-anchor="middle" class="t-s">tree-hash.sh</text>
-            <rect x="816" y="48" width="134" height="74" rx="8" class="s-box"/>
-            <text x="883" y="80" text-anchor="middle" class="t-b">4 · stamp ok?</text>
-            <text x="883" y="101" text-anchor="middle" class="t-s">vs the hash</text>
+            <text x="48" y="26" class="t-s">the bad commit’s path</text>
+            <rect x="214" y="14" width="14" height="14" class="y-tint y-stroke"/>
+            <text x="236" y="26" class="t-s">can’t tell, so allowed</text>
+            <rect x="420" y="14" width="14" height="14" class="ok-tint ok-stroke"/>
+            <text x="442" y="26" class="t-s">allowed (exit code 0)</text>
+            <rect x="640" y="14" width="14" height="14" class="bad-tint bad-stroke"/>
+            <text x="662" y="26" class="t-s">blocked (exit code 2)</text>
+            <!-- the questions -->
+            <rect x="10" y="48" width="170" height="74" rx="8" class="s-box"/>
+            <text x="95" y="80" text-anchor="middle" class="t-b">Agent’s command</text>
+            <text x="95" y="101" text-anchor="middle" class="t-s">goes to the guard</text>
+            <rect x="222" y="48" width="200" height="74" rx="8" class="s-box"/>
+            <text x="322" y="80" text-anchor="middle" class="t-b">1 · A git commit?</text>
+            <text x="322" y="101" text-anchor="middle" class="t-s">read it with shlex</text>
+            <rect x="464" y="48" width="200" height="74" rx="8" class="s-box"/>
+            <text x="564" y="80" text-anchor="middle" class="t-b">2 · Fingerprint files</text>
+            <text x="564" y="101" text-anchor="middle" class="t-s">changes if a file does</text>
+            <rect x="706" y="48" width="244" height="74" rx="8" class="s-box"/>
+            <text x="828" y="80" text-anchor="middle" class="t-b">3 · Preflight passed?</text>
+            <text x="828" y="101" text-anchor="middle" class="t-s">matches the saved one?</text>
             <!-- forward arrows -->
-            <line x1="162" y1="85" x2="200" y2="85" class="s-line c-stroke w2" marker-end="url(#g1c)"/>
-            <text x="181" y="76" text-anchor="middle" class="t-s">stdin</text>
-            <line x1="366" y1="85" x2="404" y2="85" class="s-line c-stroke w2" marker-end="url(#g1c)"/>
-            <text x="385" y="76" text-anchor="middle" class="t-s">yes</text>
-            <line x1="580" y1="85" x2="618" y2="85" class="s-line" marker-end="url(#g1k)"/>
-            <text x="599" y="76" text-anchor="middle" class="t-s">yes</text>
-            <line x1="774" y1="85" x2="812" y2="85" class="s-line" marker-end="url(#g1k)"/>
-            <text x="793" y="76" text-anchor="middle" class="t-s">hash</text>
+            <line x1="182" y1="85" x2="218" y2="85" class="s-line c-stroke w2" marker-end="url(#g1c)"/>
+            <line x1="424" y1="85" x2="460" y2="85" class="s-line" marker-end="url(#g1k)"/>
+            <text x="442" y="76" text-anchor="middle" class="t-s">yes</text>
+            <line x1="666" y1="85" x2="702" y2="85" class="s-line" marker-end="url(#g1k)"/>
+            <text x="684" y="76" text-anchor="middle" class="t-s">ok</text>
             <!-- exits -->
-            <line x1="284" y1="122" x2="284" y2="218" class="s-line" marker-end="url(#g1k)"/>
-            <text x="292" y="176" class="t-s">no</text>
-            <line x1="493" y1="122" x2="493" y2="218" class="s-line c-stroke w2" marker-end="url(#g1c)"/>
-            <text x="501" y="164" class="t-s">no, or</text>
-            <text x="501" y="180" class="t-s">can’t parse</text>
-            <line x1="697" y1="122" x2="697" y2="218" class="s-line y-stroke w2" marker-end="url(#g1y)"/>
-            <text x="705" y="176" class="t-s">hash fails</text>
-            <line x1="883" y1="122" x2="883" y2="218" class="s-line" marker-end="url(#g1k)"/>
-            <text x="891" y="176" class="t-s">no match</text>
-            <rect x="209" y="222" width="150" height="48" rx="6" class="ok-tint"/>
-            <text x="284" y="243" text-anchor="middle" class="t-b ok-fill">exit 0 · allow</text>
-            <text x="284" y="261" text-anchor="middle" class="t-s">not a commit</text>
-            <rect x="418" y="222" width="150" height="48" rx="6" class="y-tint c-stroke w2"/>
-            <text x="493" y="243" text-anchor="middle" class="t-b">exit 0 · allow</text>
-            <text x="493" y="261" text-anchor="middle" class="t-s">seam 1: can’t parse</text>
-            <rect x="622" y="222" width="150" height="48" rx="6" class="y-tint"/>
-            <text x="697" y="243" text-anchor="middle" class="t-b">exit 0 · allow</text>
-            <text x="697" y="261" text-anchor="middle" class="t-s">seam 2: can’t hash</text>
-            <rect x="816" y="222" width="134" height="48" rx="6" class="bad-tint"/>
-            <text x="883" y="243" text-anchor="middle" class="t-b bad-fill">exit 2 · block</text>
-            <text x="883" y="261" text-anchor="middle" class="t-s">the only “no”</text>
+            <line x1="240" y1="122" x2="240" y2="218" class="s-line" marker-end="url(#g1k)"/>
+            <text x="248" y="176" class="t-s">no</text>
+            <line x1="400" y1="122" x2="400" y2="218" class="s-line c-stroke w2" marker-end="url(#g1c)"/>
+            <text x="408" y="176" class="t-s">can’t read it</text>
+            <line x1="564" y1="122" x2="564" y2="218" class="s-line y-stroke w2" marker-end="url(#g1y)"/>
+            <text x="572" y="176" class="t-s">fails</text>
+            <line x1="828" y1="122" x2="828" y2="218" class="s-line" marker-end="url(#g1k)"/>
+            <text x="836" y="176" class="t-s">no match</text>
+            <rect x="165" y="222" width="150" height="48" rx="6" class="ok-tint"/>
+            <text x="240" y="243" text-anchor="middle" class="t-b ok-fill">allowed</text>
+            <text x="240" y="261" text-anchor="middle" class="t-s">not a commit</text>
+            <rect x="320" y="222" width="160" height="48" rx="6" class="y-tint c-stroke w2"/>
+            <text x="400" y="243" text-anchor="middle" class="t-b">allowed</text>
+            <text x="400" y="261" text-anchor="middle" class="t-s">hole 1: can’t read</text>
+            <rect x="482" y="222" width="164" height="48" rx="6" class="y-tint"/>
+            <text x="564" y="243" text-anchor="middle" class="t-b">allowed</text>
+            <text x="564" y="261" text-anchor="middle" class="t-s">hole 2: no fingerprint</text>
+            <rect x="753" y="222" width="150" height="48" rx="6" class="bad-tint"/>
+            <text x="828" y="243" text-anchor="middle" class="t-b bad-fill">blocked</text>
+            <text x="828" y="261" text-anchor="middle" class="t-s">the only block</text>
             <!-- notes -->
-            <text x="493" y="294" text-anchor="middle" class="t-s c-fill">the hole my commit</text>
-            <text x="493" y="310" text-anchor="middle" class="t-s c-fill">went through</text>
-            <text x="697" y="294" text-anchor="middle" class="t-s">the hole found and</text>
-            <text x="697" y="310" text-anchor="middle" class="t-s">fixed that night</text>
+            <text x="400" y="294" text-anchor="middle" class="t-s c-fill">the hole my commit</text>
+            <text x="400" y="310" text-anchor="middle" class="t-s c-fill">went through</text>
+            <text x="564" y="294" text-anchor="middle" class="t-s">found and fixed</text>
+            <text x="564" y="310" text-anchor="middle" class="t-s">that night</text>
           </svg>
         </div>
-        <figcaption><b>Two amber exits, one blue path.</b> Green and red are honest answers. Amber turns <i>I can’t tell</i> into <i>allow</i>. My commit left through the first amber exit, so the tree hash, the hole fixed that night, never ran.</figcaption>
+        <figcaption><b>Two amber holes, one blue path.</b> Amber turns <i>I can’t tell</i> into <i>allowed</i>. My commit went through the first amber hole, so it never reached the second, the one fixed that night.</figcaption>
       </figure>
     </div>
 
     <!-- The turn -->
     <div class="body span">
-      <div class="section-head"><span class="label">The turn · three weeks later</span><h2>One apostrophe short</h2></div>
+      <div class="section-head"><span class="label">The turn · three weeks later</span><h2>Why five apostrophes broke it</h2></div>
       <div class="body prose">
-        <p>My agent commits with a heredoc: <code>git commit -q -F - &lt;&lt;'EOF'</code>, the message, then <code>EOF</code>. To a shell the message is just text. <code>shlex</code> follows shell quoting but knows nothing about heredocs, so to it every apostrophe in the message is a quote mark.</p>
-        <p>The real command ran to a few dozen lines, with five apostrophes: two in <code>'EOF'</code> and three possessives in the message. Five is odd, so the last quote never closes. <code>shlex.split</code> raises <code>ValueError: No closing quotation</code>, the parser returns False, and the hook exits 0.</p>
-        <p>The replays that night used shorter messages; the closest had four apostrophes, so it parsed and the hook blocked. The exact tool input, kept in the session log all along, convicted the parser on the first run.</p>
+        <p>In a shell, an apostrophe starts a quoted piece of text, and the next apostrophe ends it. shlex follows the same rule. But my agent writes long commit messages with a <b>heredoc</b>, a shell way to pass several lines of text to a command. It looks like this: <code>git commit -q -F - &lt;&lt;'EOF'</code>, then the message, then a line that says <code>EOF</code>. The shell treats everything in between as plain text, so apostrophes in the message don’t matter. shlex doesn’t understand heredocs. To shlex, every apostrophe in the message is a quote mark.</p>
+        <p>The real command had five apostrophes: two around <code>'EOF'</code>, and three in words like <i>someone’s</i>. shlex pairs them up, and the fifth is left without a partner, a quote that never closes. shlex stops with an error: <code>No closing quotation</code>. My guard took that error to mean “not a commit”, and allowed the command.</p>
       </div>
-      <figure><span class="label graphic-label">Graphic · How five apostrophes broke the parser</span>
+      <figure><span class="label graphic-label">Graphic · How five apostrophes broke the reader</span>
         <div class="scroll">
-          <svg viewBox="0 0 960 268" style="min-width:780px" role="img" aria-label="An example commit command with the same shape as the real one has five apostrophes: two around 'EOF' on line 1, then one in each of three possessives in the message. shlex pairs them up as quotes, so the third and fourth make one quoted word across message lines, and the fifth is still open at the end. shlex.split raises ValueError, the parser's except branch returns False, the hook exits 0 with no message, and git commit runs on a red preflight.">
+          <svg viewBox="0 0 960 268" style="min-width:780px" role="img" aria-label="An example commit command with the same shape as the real one has five apostrophes: two around 'EOF' on line 1, then one in each of three words like job's in the message. shlex pairs them up as quotes, so the third and fourth make one quoted word across message lines, and the fifth is still open at the end. shlex gives up with an error, my guard reads that as not a commit and allows it silently with exit code 0, and the commit happens though preflight failed.">
             <defs>
               <marker id="g2k" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
             </defs>
@@ -623,126 +609,108 @@ pre { margin: 0; overflow-x: auto; background: var(--paper-2); padding: 10px 12p
             <text x="716" y="186" class="t-b bad-fill">No closing quotation</text>
             <!-- consequence chain -->
             <rect x="10" y="206" width="210" height="50" rx="8" class="s-box"/>
-            <text x="115" y="227" text-anchor="middle" class="t-b">shlex.split() raises</text>
-            <text x="115" y="245" text-anchor="middle" class="t-s">ValueError</text>
+            <text x="115" y="227" text-anchor="middle" class="t-b">shlex gives up</text>
+            <text x="115" y="245" text-anchor="middle" class="t-s">with an error</text>
             <line x1="222" y1="231" x2="256" y2="231" class="s-line" marker-end="url(#g2k)"/>
             <text x="240" y="222" text-anchor="middle" class="t-s">so</text>
             <rect x="260" y="206" width="210" height="50" rx="8" class="s-box"/>
-            <text x="365" y="227" text-anchor="middle" class="t-b">except ValueError:</text>
-            <text x="365" y="245" text-anchor="middle" class="t-s">return False</text>
+            <text x="365" y="227" text-anchor="middle" class="t-b">guard: can’t read it</text>
+            <text x="365" y="245" text-anchor="middle" class="t-s">so not a commit</text>
             <line x1="472" y1="231" x2="506" y2="231" class="s-line" marker-end="url(#g2k)"/>
             <text x="490" y="222" text-anchor="middle" class="t-s">so</text>
             <rect x="510" y="206" width="200" height="50" rx="8" class="s-box"/>
-            <text x="610" y="227" text-anchor="middle" class="t-b">hook: not a commit</text>
-            <text x="610" y="245" text-anchor="middle" class="t-s">exit 0, no message</text>
+            <text x="610" y="227" text-anchor="middle" class="t-b">allowed, silently</text>
+            <text x="610" y="245" text-anchor="middle" class="t-s">exit code 0</text>
             <line x1="712" y1="231" x2="746" y2="231" class="s-line" marker-end="url(#g2k)"/>
             <text x="730" y="222" text-anchor="middle" class="t-s">so</text>
             <rect x="750" y="206" width="200" height="50" rx="8" class="s-box bad-stroke w2"/>
-            <text x="850" y="227" text-anchor="middle" class="t-b">git commit runs</text>
-            <text x="850" y="245" text-anchor="middle" class="t-s">on a red preflight</text>
+            <text x="850" y="227" text-anchor="middle" class="t-b">the commit happens</text>
+            <text x="850" y="245" text-anchor="middle" class="t-s">though preflight failed</text>
           </svg>
         </div>
-        <figcaption><b>Quote marks the shell ignores and shlex counts.</b> shlex pairs up every apostrophe in the heredoc. With five, the last is still open when the command ends. That night’s closest replay had four.</figcaption>
+        <figcaption><b>Quote marks the shell ignores and shlex counts.</b> With five apostrophes, the last one is still open when the command ends. That night’s closest test had four, an even number, so shlex could read it and the guard blocked it.</figcaption>
       </figure>
-      <p class="prose">See it without any hook: four apostrophes split cleanly, three raise.</p>
-      <div class="cmd"><div class="cmd-top"><span class="cmd-what">Even parses, odd fails</span><span class="label cmd-where">Any shell with python3</span></div><div class="cmd-row"><pre>python3 - &lt;&lt;'PY'
+      <p class="prose">Try it yourself, no guard needed. With four apostrophes, shlex splits the command into words. With three, it stops with an error.</p>
+      <div class="cmd"><div class="cmd-top"><span class="cmd-what">Even splits, odd fails</span><span class="label cmd-where">Any terminal with python3</span></div><div class="cmd-row"><pre>python3 - &lt;&lt;'PY'
 import shlex
 even = "git commit -F - &lt;&lt;'EOF'\nCI's and the job's\nEOF"
 odd = "git commit -F - &lt;&lt;'EOF'\nit's done\nEOF"
 print(shlex.split(even)[:2])  # ['git', 'commit']
 shlex.split(odd)  # ValueError: No closing quotation
 PY</pre><button class="copy" type="button">Copy</button></div></div>
-      <blockquote class="pull">“A gate that can’t tell must say no.”<cite>The moral of incident No. 004</cite></blockquote>
-    </div>
-
-    <!-- The finding -->
-    <div class="body span">
-      <div class="section-head"><span class="label">The finding</span><h2>Probable cause, revised</h2></div>
-      <div class="finding">
-        <span class="label">Probable cause</span>
-        <p>The commit gate could not parse my agent’s command. An odd number of apostrophes in a heredoc commit message made <code>shlex.split</code> raise <code>ValueError</code>. The gate treated that as <i>not a commit</i> and exited 0, with no message.</p>
-        <span class="label">Contributing factors</span>
-        <ol>
-          <li>The agent’s commit line checked that <code>grep</code> found a line, not that the line said 0.</li>
-          <li>My copy of the gate had lost its source’s can’t-parse-means-commit line.</li>
-          <li>That night’s replays used shorter messages, which parsed, so the parser was cleared.</li>
-          <li>In Claude Code, only exit 2 blocks.</li>
-        </ol>
-        <span class="label">Earlier finding · filed that night</span>
-        <p>Right that a failed tree hash waved commits through, and the fix that night closed that hole. Not the path this commit took.</p>
-      </div>
+      <blockquote class="pull">“When a guard can’t tell, it must block.”<cite>The moral of incident No. 004</cite></blockquote>
     </div>
 
     <!-- The fix -->
     <div class="body span">
-      <div class="section-head"><span class="label">Recommendations · the fix</span><h2>Make “I can’t tell” mean no</h2></div>
+      <div class="section-head"><span class="label">Recommendations · the fix</span><h2>Make “I can’t tell” mean block</h2></div>
       <div class="body prose">
-        <p>The fix isn’t one more <code>if</code>. It’s a rule for every exit: before the gate knows a command is its business, it may let it go only when sure. Once the command might be a commit, every failure blocks, says why, and uses the exit code the platform reads as no.</p>
-        <p>That code is narrower than you might think. Move a gate from git into your agent’s hooks, and every <code>set -e</code> becomes a door that opens when it breaks.</p>
+        <p>The fix is a rule more than a line of code. Until the guard is sure a command is not a commit, it treats it as one and checks it. If it can’t read a command, it assumes a commit. And once it’s checking, anything that goes wrong blocks the command and says why. Engineers call this failing closed.</p>
+        <p>There’s one more trap: which exit code blocks. Git has hooks of its own, scripts git runs just before a commit. Those stop the commit on any exit code other than 0. Claude Code’s hooks block only on exit code 2. Exit code 1, or a script that crashes, lets the command run. So a guard that’s safe as a git hook can let things through as a Claude Code hook.</p>
       </div>
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>How the hook ends</th><th>git pre-commit hook</th><th>Claude Code PreToolUse hook</th></tr></thead>
+          <thead><tr><th>How the script ends</th><th>As a git hook (pre-commit)</th><th>As a Claude Code hook</th></tr></thead>
           <tbody>
-            <tr><td>exit 0</td><td>commit goes ahead</td><td>command runs</td></tr>
-            <tr><td>exit 2</td><td><span class="pill ok">commit aborted</span></td><td><span class="pill ok">command blocked</span> and stderr goes to Claude</td></tr>
-            <tr><td>exit 1, or a crash under <span class="mono">set -e</span></td><td><span class="pill ok">commit aborted</span></td><td><span class="pill warn">command runs</span></td></tr>
+            <tr><td>exit code 0</td><td>commit goes ahead</td><td>command runs</td></tr>
+            <tr><td>exit code 2</td><td><span class="pill ok">commit stopped</span></td><td><span class="pill ok">command blocked</span> and the reason goes to the agent</td></tr>
+            <tr><td>exit code 1, or a crash</td><td><span class="pill ok">commit stopped</span></td><td><span class="pill warn">command runs</span></td></tr>
           </tbody>
         </table>
       </div>
-      <figure><span class="label graphic-label">Graphic · A gate that fails closed</span>
+      <figure><span class="label graphic-label">Graphic · A guard that blocks when unsure</span>
         <div class="scroll">
-          <svg viewBox="0 0 960 290" style="min-width:780px" role="img" aria-label="The fail-closed gate asks two questions. Is it surely not a commit? Only a sure no exits 0; a command it cannot parse counts as not sure and goes on to the check. Did preflight pass for this exact tree? Only a proven yes exits 0. Anything else, including a hash that fails, exits 2 with a reason. If the hook itself crashes, cannot start or times out, Claude Code runs the command anyway unless the hook sets onFailure to block.">
+          <svg viewBox="0 0 960 290" style="min-width:780px" role="img" aria-label="The fixed guard asks two questions. Is it certainly not a commit? Only then is it allowed; a command it can't read counts as not sure and goes on to the check. Did preflight pass for these exact files? Only then is it allowed. Anything else, including a fingerprint script that fails, is blocked with a reason. If the guard itself crashes, can't start or runs too long, Claude Code runs the command anyway unless onFailure is set to block.">
             <defs>
               <marker id="g3k" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
               <marker id="g3o" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="ok-fill"/></marker>
               <marker id="g3b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="bad-fill"/></marker>
             </defs>
             <!-- allow exits -->
-            <rect x="230" y="16" width="150" height="48" rx="6" class="ok-tint"/>
-            <text x="305" y="37" text-anchor="middle" class="t-b ok-fill">exit 0 · allow</text>
-            <text x="305" y="55" text-anchor="middle" class="t-s">a sure no</text>
+            <rect x="220" y="16" width="170" height="48" rx="6" class="ok-tint"/>
+            <text x="305" y="37" text-anchor="middle" class="t-b ok-fill">allowed</text>
+            <text x="305" y="55" text-anchor="middle" class="t-s">certainly not a commit</text>
             <rect x="530" y="16" width="150" height="48" rx="6" class="ok-tint"/>
-            <text x="605" y="37" text-anchor="middle" class="t-b ok-fill">exit 0 · allow</text>
-            <text x="605" y="55" text-anchor="middle" class="t-s">verified</text>
+            <text x="605" y="37" text-anchor="middle" class="t-b ok-fill">allowed</text>
+            <text x="605" y="55" text-anchor="middle" class="t-s">checks passed</text>
             <!-- the path -->
             <rect x="10" y="118" width="150" height="64" rx="8" class="s-box"/>
-            <text x="85" y="146" text-anchor="middle" class="t-b">Agent’s Bash call</text>
-            <text x="85" y="166" text-anchor="middle" class="t-s">PreToolUse hook</text>
-            <rect x="210" y="118" width="190" height="64" rx="8" class="s-box"/>
-            <text x="305" y="146" text-anchor="middle" class="t-b">Surely not a commit?</text>
-            <text x="305" y="166" text-anchor="middle" class="t-s">only a sure no escapes</text>
+            <text x="85" y="146" text-anchor="middle" class="t-b">Agent’s command</text>
+            <text x="85" y="166" text-anchor="middle" class="t-s">goes to the guard</text>
+            <rect x="205" y="118" width="200" height="64" rx="8" class="s-box"/>
+            <text x="305" y="146" text-anchor="middle" class="t-b">Certainly not a commit?</text>
+            <text x="305" y="166" text-anchor="middle" class="t-s">allowed only if certain</text>
             <rect x="500" y="118" width="210" height="64" rx="8" class="s-box"/>
-            <text x="605" y="146" text-anchor="middle" class="t-b">Passed for this tree?</text>
-            <text x="605" y="166" text-anchor="middle" class="t-s">fresh hash = stamp</text>
+            <text x="605" y="146" text-anchor="middle" class="t-b">Preflight passed?</text>
+            <text x="605" y="166" text-anchor="middle" class="t-s">for these exact files</text>
             <rect x="810" y="118" width="140" height="64" rx="8" class="bad-tint"/>
-            <text x="880" y="146" text-anchor="middle" class="t-b bad-fill">exit 2 · block</text>
-            <text x="880" y="166" text-anchor="middle" class="t-s">and say why</text>
+            <text x="880" y="146" text-anchor="middle" class="t-b bad-fill">blocked</text>
+            <text x="880" y="166" text-anchor="middle" class="t-s">and says why</text>
             <!-- arrows -->
-            <line x1="162" y1="150" x2="206" y2="150" class="s-line" marker-end="url(#g3k)"/>
-            <text x="185" y="141" text-anchor="middle" class="t-s">stdin</text>
+            <line x1="162" y1="150" x2="201" y2="150" class="s-line" marker-end="url(#g3k)"/>
             <line x1="305" y1="118" x2="305" y2="68" class="s-line ok-stroke w2" marker-end="url(#g3o)"/>
-            <text x="313" y="98" class="t-s">sure</text>
-            <line x1="402" y1="150" x2="496" y2="150" class="s-line" marker-end="url(#g3k)"/>
-            <text x="449" y="140" text-anchor="middle" class="t-s">no, or unsure</text>
-            <text x="449" y="170" text-anchor="middle" class="t-s y-fill">can’t parse</text>
+            <text x="313" y="98" class="t-s">certain</text>
+            <line x1="407" y1="150" x2="496" y2="150" class="s-line" marker-end="url(#g3k)"/>
+            <text x="451" y="140" text-anchor="middle" class="t-s">not certain</text>
+            <text x="451" y="170" text-anchor="middle" class="t-s y-fill">can’t read</text>
             <line x1="605" y1="118" x2="605" y2="68" class="s-line ok-stroke w2" marker-end="url(#g3o)"/>
-            <text x="613" y="98" class="t-s">yes, proven</text>
+            <text x="613" y="98" class="t-s">passed</text>
             <line x1="712" y1="150" x2="806" y2="150" class="s-line bad-stroke w2" marker-end="url(#g3b)"/>
-            <text x="759" y="140" text-anchor="middle" class="t-s">no, or error</text>
-            <text x="759" y="170" text-anchor="middle" class="t-s y-fill">can’t hash</text>
-            <!-- the platform's own seam -->
+            <text x="759" y="140" text-anchor="middle" class="t-s">not passed</text>
+            <text x="759" y="170" text-anchor="middle" class="t-s y-fill">script fails</text>
+            <!-- the platform's own gap -->
             <rect x="10" y="212" width="940" height="66" rx="6" class="s-box-soft"/>
-            <text x="26" y="238" class="t-b">And if the hook itself breaks?</text>
-            <text x="26" y="260" class="t-s">Claude Code runs the command anyway, unless the hook sets "onFailure": "block" (v2.1.295 or later).</text>
+            <text x="26" y="238" class="t-b">And if the guard itself breaks?</text>
+            <text x="26" y="260" class="t-s">If it crashes, can’t start or runs too long, Claude Code runs the command anyway, unless the setting "onFailure" is "block" (step 4).</text>
             <line x1="880" y1="212" x2="880" y2="186" class="s-dash bad-stroke" marker-end="url(#g3b)"/>
             <text x="872" y="204" text-anchor="end" class="t-s">if onFailure is block</text>
           </svg>
         </div>
-        <figcaption><b>Two questions, three exits, and the default is no.</b> The old seams (amber) now lead on to the check and the block. The band underneath is the platform’s own seam, a hook that can’t start, crashes or hangs, and only <span class="mono">onFailure</span> closes it.</figcaption>
+        <figcaption><b>Two questions, and when unsure, block.</b> Allowed means the guard ends with exit code 0; blocked means exit code 2. The band underneath is Claude Code’s own hole, which only the <span class="mono">onFailure</span> setting closes.</figcaption>
       </figure>
+      <p class="prose">Here’s the version I use now, in five steps: a script that fingerprints your files, two lines that save the fingerprint when preflight passes, the guard that compares the saved fingerprint with a fresh one, the setting that tells Claude Code to run the guard, and four tests. If you only want the rule, you can skip the code.</p>
       <ol class="checklist steps">
-        <li><div><h3>Hash the tree, and survive a vanishing file</h3><p>Preflight and the gate need the same fingerprint of the working tree: HEAD, the diff and every untracked file. The <code>|| echo gone</code> keeps a file that vanishes mid-run (coverage output, a temp dir) from killing the script under <code>set -e</code>. Without it, the script exits 1 and can still print a normal-looking hash.</p><pre>#!/usr/bin/env bash
+        <li><div><h3>Take a fingerprint of your files</h3><p>Preflight and the guard must agree on which files were checked. This script turns your last commit, your changes and any new files into one short code, the fingerprint. Change any file and the fingerprint changes. The <code>|| echo gone</code> line keeps it going if a temporary file disappears while it runs. Save it as <code>scripts/tree-hash.sh</code> and make it runnable with <code>chmod +x</code>.</p><pre>#!/usr/bin/env bash
 # One hash for HEAD, the diff and untracked files.
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." &amp;&amp; pwd)"
@@ -759,10 +727,10 @@ cd "$ROOT"
           cut -d' ' -f1; } || echo gone
     done
 } | shasum -a 256 | cut -d' ' -f1</pre></div></li>
-        <li><div><h3>Stamp the tree when preflight passes</h3><p>At the very end of preflight, write the hash where the gate will look. With <code>set -euo pipefail</code>, a red step never gets this far.</p><pre># The last lines of scripts/preflight.sh
+        <li><div><h3>Save the fingerprint when preflight passes</h3><p>Add these lines at the very end of preflight. If any check failed, preflight stops before it gets here, so nothing is saved. The guard’s messages call the saved fingerprint the stamp.</p><pre># The last lines of scripts/preflight.sh
 "$ROOT/scripts/tree-hash.sh" &gt; "$ROOT/.git/preflight-pass"
 echo "preflight passed: safe to commit"</pre></div></li>
-        <li><div><h3>Write the gate in three zones</h3><p>A cheap filter that exits 0 only on a sure no. A parser that exits 0 only on a clear “not a commit”, and treats anything it can’t parse as a commit. Then the real check, where every failure blocks with a reason, and the hasher’s exit status counts, not just its output. Save it as <code>scripts/hooks/commit-gate.sh</code>, executable.</p><p>Like any gate that reads command text, it guards against forgetting, not evasion: a commit inside <code>bash -c "…"</code> or built from a variable is just text to a parser.</p><pre>#!/usr/bin/env bash
+        <li><div><h3>Write the guard: when unsure, it’s a commit</h3><p>First, if the command doesn’t contain the word commit, allow it. Then read it with shlex: if it’s clearly not a git commit, allow it, and if shlex can’t read it, treat it as a commit. Last, compare the saved fingerprint with a fresh one, and block with a reason if anything is missing, fails or doesn’t match. Save it as <code>scripts/hooks/commit-guard.sh</code> and make it runnable with <code>chmod +x</code>.</p><p>It protects against mistakes, not against someone trying to sneak past. A commit hidden inside <code>bash -c "…"</code> is just text to it.</p><pre>#!/usr/bin/env bash
 # Claude Code PreToolUse hook, matcher "Bash".
 # Blocks `git commit` until preflight passed for
 # this exact tree. Exit 2 blocks; ANY other exit
@@ -814,7 +782,7 @@ now="$("$ROOT/scripts/tree-hash.sh")" \
 [ "$now" = "$(cat "$stamp")" ] \
   || block "preflight has not passed for this tree"
 exit 0</pre></div></li>
-        <li><div><h3>Register it, and close the platform’s door</h3><p>Match <code>Bash</code>, because that’s how an agent commits. With <code>"onFailure": "block"</code> (Claude Code v2.1.295 or later), a hook that won’t start or times out blocks instead of waving the command through. A broken hook then blocks every Bash call until you fix it. Loud is the point. In <code>.claude/settings.json</code>:</p><pre>{
+        <li><div><h3>Tell Claude Code to run it</h3><p>Add this to <code>.claude/settings.json</code> in your repo. <code>PreToolUse</code> means “before the agent uses a tool”, and <code>"matcher": "Bash"</code> narrows that to shell commands, which is how the agent commits. <code>"onFailure": "block"</code> (Claude Code v2.1.295 or later) also blocks when the guard itself crashes, won’t start or runs too long. A broken guard then blocks every command until you fix it. That’s on purpose: you’ll notice.</p><pre>{
   "hooks": {
     "PreToolUse": [
       {
@@ -822,7 +790,7 @@ exit 0</pre></div></li>
         "hooks": [
           {
             "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/scripts/hooks/commit-gate.sh",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/scripts/hooks/commit-guard.sh",
             "onFailure": "block"
           }
         ]
@@ -830,7 +798,7 @@ exit 0</pre></div></li>
     ]
   }
 }</pre></div></li>
-        <li><div><h3>Prove it blocks, by breaking it</h3><p>Run it from the repo root against your current hook; it works in a throwaway folder, away from your real stamp. Want 0, then 2, 2, 2: the third is the shape that walked through my gate, the fourth a hasher that always fails. My gate as it stood that night scores 0, 0, 0, 0; the gate above, 0, 2, 2, 2.</p><div class="cmd"><div class="cmd-top"><span class="cmd-what">Four tests: want 0, 2, 2, 2</span><span class="label cmd-where">Repo root, bash or zsh</span></div><div class="cmd-row"><pre>g=scripts/hooks/commit-gate.sh   # or your hook
+        <li><div><h3>Prove it blocks: try to break it</h3><p>Run this from your repo root. It works in a temporary folder, so your real files aren’t touched. Each test prints the guard’s exit code. You want 0 for the first test and 2 for the other three. The third test is the shape that got past my old guard. The fourth uses a fingerprint script that always fails. My old guard printed 0 for all four: the third went through hole 1, and the second and fourth through hole 2, because the temporary folder has no working fingerprint script.</p><div class="cmd"><div class="cmd-top"><span class="cmd-what">Four tests: want 0, 2, 2, 2</span><span class="label cmd-where">Repo root, bash or zsh</span></div><div class="cmd-row"><pre>g=scripts/hooks/commit-guard.sh   # or your hook
 t=$(mktemp -d); mkdir -p "$t/.git" "$t/scripts"
 run() { CLAUDE_PROJECT_DIR="$t" "$g" &gt;/dev/null 2&gt;&amp;1
         echo "$1: exit $?"; }
@@ -847,59 +815,64 @@ chmod +x "$t/scripts/tree-hash.sh"
 echo '{"tool_input":{"command":"git commit -m x"}}' \
   | run "hasher fails (want 2)"</pre><button class="copy" type="button">Copy</button></div></div></div></li>
       </ol>
-      <p class="closing prose">Eight minutes after the red commit, my agent ran its next commit line. This one didn’t settle for a match. It pulled the number out of the log, and if it wasn’t 0, it printed <code>REFUSING TO COMMIT</code> and stopped. That’s the whole job of a gate: read the answer, and when you can’t read it, refuse.</p>
+      <p class="closing prose">Eight minutes after the bad commit, the agent ran its next commit command. This one didn’t stop at finding the line. It read the number in it, and if the number wasn’t 0, it printed <code>REFUSING TO COMMIT</code> and stopped. That’s the rule for any check: read the answer, and when you can’t read it, refuse.</p>
       <span class="stamp" aria-label="Finding revised">Finding revised</span>
     </div>
 
     <!-- If this happens to you -->
     <div class="body span">
-      <div class="section-head"><span class="label">If this happens to you</span><h2>A gate let something through: check these in order</h2></div>
+      <div class="section-head"><span class="label">If this happens to you</span><h2>A guard let something through: check these in order</h2></div>
       <ol class="checklist">
-        <li><div><h3>List every way out</h3><p>Each <code>exit 0</code> should mean “definitely not my business”. One that means “I couldn’t tell” is your hole. Count the <code>|| exit 0</code> lines too.</p><pre>grep -n 'exit 0' scripts/hooks/*.sh</pre></div></li>
-        <li><div><h3>Replay the exact command, then break it</h3><p>Put the real command from the session log in a file, not a shorter one, and feed it to the hook as JSON. Then run the four tests above.</p><pre>python3 -c 'import json,sys
+        <li><div><h3>Find every place it allows</h3><p>In a Claude Code hook, any ending other than exit code 2 allows, crashes included. Each one should mean “certainly not a commit” or “preflight passed”. If one means “I couldn’t tell”, that’s your hole. Start with the explicit ones:</p><pre>grep -n 'exit 0' scripts/hooks/*.sh</pre></div></li>
+        <li><div><h3>Replay the exact command, then try to break it</h3><p>Copy the real command from the session log into a file, not a shorter version. Feed it to the guard as JSON, the way Claude Code does. Then run the four tests.</p><pre>python3 -c 'import json,sys
 print(json.dumps({"tool_input":
   {"command": open(sys.argv[1]).read()}}))' cmd.txt \
-  | scripts/hooks/commit-gate.sh; echo "exit $?"</pre></div></li>
-        <li><div><h3>Make every exit speak</h3><p>My gate let the red commit through in silence. Print a reason on every block, and since Claude never sees stderr from a hook that exits 0, log the allows while you debug.</p><pre>log() { printf '%s %s\n' "$(date +%T)" "$*" \
-  &gt;&gt; "$ROOT/.git/gate.log"; }
+  | scripts/hooks/commit-guard.sh; echo "exit $?"</pre></div></li>
+        <li><div><h3>Make every exit explain itself</h3><p>Print a reason whenever the guard blocks. When it allows a command, the agent never sees what it printed, so while you debug, write each allow to a log file.</p><pre>log() { printf '%s %s\n' "$(date +%T)" "$*" \
+  &gt;&gt; "$ROOT/.git/guard.log"; }
 log "allow: not a commit"</pre></div></li>
-        <li><div><h3>Read the number, not the line</h3><p>Pull the value out and refuse anything that isn’t exactly 0, including nothing at all.</p><pre>ec=$(grep -o 'preflight_exit=[0-9]*' pf.log | cut -d= -f2)
+        <li><div><h3>Read the number, not the line</h3><p>This goes in the agent’s own commit command, before <code>git commit</code>, not in the guard. Take the number out of the line, and refuse anything that isn’t exactly 0, including a missing line.</p><pre>ec=$(grep -o 'preflight_exit=[0-9]*' pf.log | cut -d= -f2)
 [ "$ec" = "0" ] || { echo "REFUSING TO COMMIT"; exit 1; }</pre></div></li>
-        <li><div><h3>Carry the fix to every copy</h3><p>Fix the template first, then diff each repo’s copy against it.</p><pre>diff ../template/scripts/hooks/commit-gate.sh \
-     scripts/hooks/commit-gate.sh</pre></div></li>
+        <li><div><h3>Fix every copy</h3><p>If the guard lives in several repos, fix the template first, then compare each copy with it.</p><pre>diff ../template/scripts/hooks/commit-guard.sh \
+     scripts/hooks/commit-guard.sh</pre></div></li>
       </ol>
       <div class="takeaways">
         <span class="label">Key takeaways</span>
         <ol>
-          <li><b>A gate that can’t tell must say no.</b> Only a sure “not mine” may exit 0. Everything else blocks, with a reason.</li>
-          <li><b>Replay the exact input.</b> A tidied-up sample cleared the guilty parser. The real command convicted it on the first run.</li>
-          <li><b>A fix isn’t done until every copy has it.</b> Copies drift. Mine had lost the one safe line its source carried.</li>
+          <li><b>When a guard can’t tell, it must block.</b> Allow only when certain: certainly not a commit, or preflight passed. Everything else is blocked, with a reason.</li>
+          <li><b>Test with the exact input.</b> A shorter test message made the real cause look innocent. The real command exposed it on the first run.</li>
+          <li><b>A fix isn’t done until every copy has it.</b> Copies drift. Mine had lost the one safe line its original had.</li>
         </ol>
       </div>
     </div>
 
     <!-- Field guide -->
     <div class="body span">
-      <div class="section-head"><span class="label">Field guide · the same mistake elsewhere</span><h2>Two more ways a gate goes quiet</h2></div>
+      <div class="section-head"><span class="label">Field guide · if you let an AI agent commit</span><h2>What this taught me about guarding an AI agent</h2></div>
       <div class="guide">
-        <div><h3>Never on the path</h3><p>In another repo, a reminder hook for sensitive paths matched Edit, Write and NotebookEdit. In auto mode the agent edited through Bash (heredocs, <code>sed</code>, <code>python3 -</code>), so in the session that wrote the hook it would not have fired once. Matching Bash too fixed that. It stays fail-open on purpose: it’s a reminder, not a gate.</p></div>
-        <div><h3>A slow gate is an open gate</h3><p>A PreToolUse hook that times out doesn’t block, and the default timeout is 600 seconds. A hasher crawling a huge tree is one more way out, unless <code>onFailure</code> is <code>"block"</code>.</p></div>
+        <div><h3>Its mistakes look like checks</h3><p>The agent put the check and the commit in one command, so nobody, the agent included, looked at the result before the commit ran. A person could write that command too. An agent writes it fast, at any hour, with no one watching.</p></div>
+        <div><h3>Silent failure is the worst kind</h3><p>A guard that blocks by mistake gets noticed in minutes, because you can’t work. A guard that allows by mistake gets noticed only when the thing it guards against actually happens.</p></div>
+        <div><h3>Attack your own guards</h3><p>Seeing a guard handle normal commands proves little. Feed it strange input and a broken fingerprint script, as the four tests above do.</p></div>
       </div>
     </div>
 
     <!-- Glossary -->
     <div class="body span">
-      <div class="section-head"><span class="label">Glossary</span><h2>Words from this issue</h2></div>
+      <div class="section-head"><span class="label">Glossary</span><h2>Words from this issue, and where each comes from</h2></div>
       <dl class="gloss">
-        <dt>Fail open</dt><dd>When a check breaks, it lets things through.</dd>
-        <dt>Fail closed</dt><dd>When a check breaks, it refuses. Also called fail-secure.</dd>
-        <dt>Preflight</dt><dd>A local script that runs CI’s checks before you commit.</dd>
-        <dt>Stamp</dt><dd>A hash of HEAD, the diff and untracked files, written when preflight passes.</dd>
-        <dt>PreToolUse hook</dt><dd>A Claude Code hook that runs before a tool call. Exit 2 blocks it.</dd>
-        <dt>onFailure</dt><dd>A hook setting. <code>"block"</code> makes a hook that fails or times out block too.</dd>
-        <dt>shlex</dt><dd>Python’s shell-style splitter. A quote that never closes raises ValueError.</dd>
-        <dt>Heredoc</dt><dd><code>&lt;&lt;'EOF'</code> … <code>EOF</code>: lines fed to a command’s standard input.</dd>
-        <dt>pipefail</dt><dd>Bash option: a pipeline fails if any stage fails.</dd>
+        <dt>Commit<span class="from">git</span></dt><dd>Saving a snapshot of your changes into git’s history.</dd>
+        <dt>CI<span class="from">general</span></dt><dd>Checks a server runs automatically on every change you push.</dd>
+        <dt>Preflight<span class="from">my own script</span></dt><dd>Runs CI’s checks on my machine before a commit.</dd>
+        <dt>preflight_exit<span class="from">my own label</span></dt><dd>The line printed when preflight finished. <code>preflight_exit=0</code> means every check passed; <code>preflight_exit=1</code> means at least one failed.</dd>
+        <dt>Guard<span class="from">my own name</span></dt><dd>My script that allows or blocks each command before the agent runs it. Claude Code calls it a hook.</dd>
+        <dt>Hook<span class="from">Claude Code</span></dt><dd>A script of yours that Claude Code runs at set moments, for example before each command (a PreToolUse hook). It blocks only by ending with exit code 2. Git has hooks too, and those stop a commit on any exit code other than 0.</dd>
+        <dt>Fingerprint<span class="from">general (a hash)</span></dt><dd>A short code computed from files. Change one character and the code changes.</dd>
+        <dt>Stamp<span class="from">my own name</span></dt><dd>The saved fingerprint: what preflight writes when every check passes.</dd>
+        <dt>onFailure<span class="from">Claude Code</span></dt><dd>A hook setting. <code>"block"</code> means a hook that crashes or runs too long also blocks.</dd>
+        <dt>Exit code<span class="from">shell</span></dt><dd>The number a program ends with. 0 means success; any other number means some kind of failure.</dd>
+        <dt>grep<span class="from">shell tool</span></dt><dd>Finds lines that contain some text.</dd>
+        <dt>Heredoc<span class="from">shell</span></dt><dd><code>&lt;&lt;'EOF'</code> … <code>EOF</code>: a way to pass several lines of text to a command.</dd>
+        <dt>shlex<span class="from">Python</span></dt><dd>Splits a command into words the way a shell would. A quote that never closes is an error.</dd>
       </dl>
     </div>
   </div>
@@ -908,7 +881,7 @@ log "allow: not a commit"</pre></div></li>
   <footer class="colophon">
     <span class="label">Sources and further reading</span>
     <div class="facts">
-      <div><span class="label">Hook exit codes</span><a href="https://code.claude.com/docs/en/hooks">Claude Code hooks reference</a>: exit 2 blocks, other failures don’t, and <code>onFailure</code>.</div>
+      <div><span class="label">Hook exit codes</span><a href="https://code.claude.com/docs/en/hooks">Claude Code hooks reference</a>: exit code 2 blocks, other failures don’t, and <code>onFailure</code>.</div>
       <div><span class="label">Git hooks</span><a href="https://git-scm.com/docs/githooks">githooks(5)</a>: a <code>pre-commit</code> hook that exits non-zero aborts the commit.</div>
       <div><span class="label">Bash</span><a href="https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html">The Set builtin</a>: <code>-e</code>, <code>-u</code> and <code>pipefail</code>.</div>
       <div><span class="label">The parser</span><a href="https://docs.python.org/3/library/shlex.html">Python shlex</a>: shell-style splitting, and what it doesn’t know about.</div>

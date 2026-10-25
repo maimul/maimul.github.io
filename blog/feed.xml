@@ -8,11 +8,11 @@
   <language>en</language>
   <lastBuildDate>Sat, 24 Oct 2026 09:00:00 +0800</lastBuildDate>
   <item>
-    <title>The Green Gate That Let a Red Commit Through</title>
+    <title>The Guard That Couldn’t Read, So It Waved the Commit Through</title>
     <link>https://maimul.github.io/blog/004-green-gate-red-commit/</link>
     <guid isPermaLink="true">https://maimul.github.io/blog/004-green-gate-red-commit/</guid>
     <pubDate>Sat, 24 Oct 2026 09:00:00 +0800</pubDate>
-    <description>My AI coding agent committed on a failed preflight, and the Claude Code hook built to stop exactly that said nothing. The finding filed that night blamed the wrong line. Here&#x27;s the flight-recorder replay that found the real cause, and a commit gate you can copy that fails closed.</description>
+    <description>My AI coding agent was only allowed to commit code once the code passed my checks. One night the checks failed, the agent committed anyway, and the guard I&#x27;d built to stop exactly that did nothing. Here&#x27;s why, in plain words, and the rule that fixes it.</description>
     <category>claude-code</category>
     <category>git-hooks</category>
     <category>ai-coding-agents</category>

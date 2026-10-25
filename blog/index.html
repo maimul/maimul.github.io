@@ -371,9 +371,9 @@ pre { margin: 0; overflow-x: auto; background: var(--paper-2); padding: 10px 12p
       <a class="lead-cover" href="004-green-gate-red-commit/" tabindex="-1" aria-hidden="true"><img src="004-green-gate-red-commit/cover.png" width="1200" height="630" alt=""></a>
       <div class="lead-copy">
         <span class="label kicker">No. 004 · claude-code · git-hooks · ai-coding-agents · ci</span>
-        <h2 id="lead-h" class="lead-head"><a href="004-green-gate-red-commit/">The Green Gate That Let a Red Commit Through</a></h2>
-        <p class="deck">My AI coding agent committed on a failed preflight, and the Claude Code hook built to stop exactly that said nothing. The finding filed that night blamed the wrong line. Here&#x27;s the flight-recorder replay that found the real cause, and a commit gate you can copy that fails closed.</p>
-        <div class="lead-learn"><span class="label">What you’ll learn</span><ul><li>Which exit code actually blocks a Claude Code hook, and why a hook that crashes lets the command run.</li><li>How a few apostrophes can turn `git commit` into &quot;not a commit&quot; for a shell-style parser.</li><li>A copy-paste commit gate that fails closed, and four tests that prove it.</li><li>Why you replay an incident with the exact input, not a tidied-up copy.</li></ul></div>
+        <h2 id="lead-h" class="lead-head"><a href="004-green-gate-red-commit/">The Guard That Couldn’t Read, So It Waved the Commit Through</a></h2>
+        <p class="deck">My AI coding agent was only allowed to commit code once the code passed my checks. One night the checks failed, the agent committed anyway, and the guard I&#x27;d built to stop exactly that did nothing. Here&#x27;s why, in plain words, and the rule that fixes it.</p>
+        <div class="lead-learn"><span class="label">What you’ll learn</span><ul><li>How to make Claude Code run your own script before every command an AI agent runs, so the script can block it.</li><li>Why that script has to end with exit code 2, the number it hands back to Claude Code, to block a command. Exit code 1 lets the command run.</li><li>How five apostrophes stopped my guard from reading a command, and the rule that fixes it, with code and four tests.</li><li>Why you test with the exact command that failed, not a shorter copy.</li></ul></div>
         <span class="label">Saturday, 24 October 2026 · <a class="read" href="004-green-gate-red-commit/">Read the issue →</a></span>
       </div>
     </article>
