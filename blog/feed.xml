@@ -6,7 +6,23 @@
   <atom:link href="https://maimul.github.io/blog/feed.xml" rel="self" type="application/rss+xml"/>
   <description>One thing I learned, written up like a newspaper feature.</description>
   <language>en</language>
-  <lastBuildDate>Sat, 24 Oct 2026 09:00:00 +0800</lastBuildDate>
+  <lastBuildDate>Mon, 26 Oct 2026 09:00:00 +0800</lastBuildDate>
+  <item>
+    <title>The Deploy That Went Green and Shipped Nothing</title>
+    <link>https://maimul.github.io/blog/005-deploy-green-shipped-nothing/</link>
+    <guid isPermaLink="true">https://maimul.github.io/blog/005-deploy-green-shipped-nothing/</guid>
+    <pubDate>Mon, 26 Oct 2026 09:00:00 +0800</pubDate>
+    <description>My home server&#x27;s deploy failed at step one, and every step after it reported success. Here&#x27;s how a failure goes missing in a deploy chain, and a copy-paste script that refuses to call nothing a success.</description>
+    <category>deploys</category>
+    <category>git</category>
+    <category>bash</category>
+    <category>zsh</category>
+    <category>docker</category>
+    <category>kubernetes</category>
+    <category>k3s</category>
+    <category>rclone</category>
+    <category>home-lab</category>
+  </item>
   <item>
     <title>The Guard That Couldn’t Read, So It Waved the Commit Through</title>
     <link>https://maimul.github.io/blog/004-green-gate-red-commit/</link>

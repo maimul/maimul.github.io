@@ -291,6 +291,12 @@ h2{margin:0 0 .7em;font:800 clamp(30px,4.4vw,46px)/1.05 var(--display);font-stre
       <p class="section-intro">One thing I figured out, written up like a newspaper feature: what broke, what I thought was going on, what was actually true, with diagrams and the dead ends left in.</p>
       <!-- blog:latest -->
       <ul class="posts">
+        <li><a class="post" href="blog/005-deploy-green-shipped-nothing/">
+          <span class="post-meta"><span class="post-no">No. 005</span><span>26 Oct 2026</span></span>
+          <h3>The Deploy That Went Green and Shipped Nothing</h3>
+          <p>My home server&#x27;s deploy failed at step one, and every step after it reported success. Here&#x27;s how a failure goes missing in a deploy chain, and a copy-paste script that refuses to call nothing a success.</p>
+          <span class="post-tags">deploys · git · bash</span>
+        </a></li>
         <li><a class="post" href="blog/004-green-gate-red-commit/">
           <span class="post-meta"><span class="post-no">No. 004</span><span>24 Oct 2026</span></span>
           <h3>The Guard That Couldn’t Read, So It Waved the Commit Through</h3>
@@ -302,12 +308,6 @@ h2{margin:0 0 .7em;font:800 clamp(30px,4.4vw,46px)/1.05 var(--display);font-stre
           <h3>Every Test Passed. Production Returned 500.</h3>
           <p>My test suite was green, my smoke test was green, and a photo upload in a FastAPI app I work on had never worked. Here&#x27;s the Python behaviour that hid it, the test that now catches it, and why fixing the bug still didn&#x27;t fix the feature.</p>
           <span class="post-tags">python · imports · fastapi</span>
-        </a></li>
-        <li><a class="post" href="blog/002-bonjour-avahi-nas-printer/">
-          <span class="post-meta"><span class="post-no">No. 002</span><span>19 Oct 2026</span></span>
-          <h3>The Case of the Printer Nobody Could Reach</h3>
-          <p>My iPhone could see my home printer, but it hadn&#x27;t printed a page in 127 days. Here&#x27;s how I tracked down why, what finally fixed it, and how to check your own setup when AirPrint goes quiet.</p>
-          <span class="post-tags">bonjour · mdns · avahi</span>
         </a></li>
       </ul>
       <!-- /blog:latest -->
