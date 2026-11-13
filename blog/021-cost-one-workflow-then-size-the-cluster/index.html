@@ -352,6 +352,33 @@ pre { margin: 0; overflow-x: auto; background: var(--paper-2); padding: 10px 12p
   .kcard dl { margin: 0; display: grid; grid-template-columns: 1fr auto; gap: 3px 10px; font-size: 0.92rem; }
   .kcard dt { margin: 0; }
   .kcard dd { margin: 0; font-family: var(--font-mono); font-size: 0.82rem; text-align: right; }
+  
+  /* Layout fixes found on the live page (13 Nov 2026): this issue only, so no other issue's page changes. */
+  /* Code: show |= and != as typed, not as ligature symbols. */
+  .paper pre, .paper code { font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
+  /* Sidebars: five cards as 3 + 2, equal heights per row, no card alone on a row. */
+  .rail { grid-template-columns: repeat(6, minmax(0, 1fr)); align-items: stretch; }
+  .rail > * { grid-column: span 2; }
+  .rail > :nth-child(4) { grid-column: span 4; }
+  .rail > :nth-child(5) { grid-column: span 2; }
+  .rail > .box { align-content: start; }
+  @media (max-width: 900px) { .rail { grid-template-columns: repeat(2, minmax(0, 1fr)); } .rail > *, .rail > :nth-child(4), .rail > :nth-child(5) { grid-column: auto; } .rail > :last-child { grid-column: 1 / -1; } }
+  @media (max-width: 560px) { .rail { grid-template-columns: minmax(0, 1fr); } .rail > :last-child { grid-column: auto; } }
+  /* By the numbers: room for the figure so it never touches its label. */
+  .num { grid-template-columns: 7.5rem minmax(0, 1fr); }
+  .num b { white-space: nowrap; font-size: 2rem; }
+  /* One-paragraph prose blocks stay in one column (no orphan word in column two). */
+  .prose:has(> p:only-child) { columns: 1; max-width: 72ch; }
+  .prose p { orphans: 2; widows: 2; }
+  /* Command pairs: label and code stay together at the top of each cell. */
+  .cmds { align-items: start; }
+  .cmd { align-content: start; }
+  .cmds > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+  /* Puzzle cards share one height; glossary columns start on the same line. */
+  .quiz { align-items: stretch; }
+  .gloss dt:first-of-type { margin-top: 0; }
+  /* Graphics fill their frame instead of floating in the middle of it. */
+  .paper figure > .diagram svg, .paper figure svg { width: 100%; max-width: 100%; height: auto; }
   </style>
 
   <!-- Nameplate -->
@@ -363,7 +390,7 @@ pre { margin: 0; overflow-x: auto; background: var(--paper-2); padding: 10px 12p
     <h1 class="title">Today <span class="title-i">I</span> Learned</h1>
     <p class="motto">All the bugs that are fit to print</p>
     <div class="dateline">
-      <span class="label">Sunday, 13 December 2026</span>
+      <span class="label">Friday, 13 November 2026</span>
       <span class="label">Public edition · names and addresses are examples</span>
       <span class="label">Free to read</span>
     </div>
