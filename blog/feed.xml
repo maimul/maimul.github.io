@@ -6,7 +6,19 @@
   <atom:link href="https://maimul.github.io/blog/feed.xml" rel="self" type="application/rss+xml"/>
   <description>One thing I learned, written up like a newspaper feature.</description>
   <language>en</language>
-  <lastBuildDate>Mon, 26 Oct 2026 09:00:00 +0800</lastBuildDate>
+  <lastBuildDate>Fri, 13 Nov 2026 09:00:00 +0800</lastBuildDate>
+  <item>
+    <title>Claude Code, in Plain Words</title>
+    <link>https://maimul.github.io/blog/006-claude-code-in-plain-words/</link>
+    <guid isPermaLink="true">https://maimul.github.io/blog/006-claude-code-in-plain-words/</guid>
+    <pubDate>Fri, 13 Nov 2026 09:00:00 +0800</pubDate>
+    <description>My posts about AI coding agents keep leaning on words like tool, context, permission mode and hook. This is the one page that explains them, in the order you meet them when you ask Claude Code to do something, so every other post can link here.</description>
+    <category>claude-code</category>
+    <category>glossary</category>
+    <category>ai-coding-agents</category>
+    <category>permissions</category>
+    <category>context</category>
+  </item>
   <item>
     <title>The Deploy That Went Green and Shipped Nothing</title>
     <link>https://maimul.github.io/blog/005-deploy-green-shipped-nothing/</link>
