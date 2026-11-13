@@ -13,7 +13,7 @@
 <meta property="og:title" content="Today I Learned">
 <meta property="og:description" content="One thing I learned, written up like a newspaper feature. By Maimul.">
 <meta property="og:url" content="https://maimul.github.io/blog/">
-<meta property="og:image" content="https://maimul.github.io/blog/006-claude-code-in-plain-words/cover.png">
+<meta property="og:image" content="https://maimul.github.io/blog/021-cost-one-workflow-then-size-the-cluster/cover.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=Archivo+Narrow:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
@@ -354,7 +354,7 @@ pre { margin: 0; overflow-x: auto; background: var(--paper-2); padding: 10px 12p
   <nav class="til-nav" aria-label="Site"><a href="../">← maimul.github.io</a><a href="feed.xml">RSS</a></nav>
   <header class="nameplate">
     <div class="earline">
-      <span class="label">Vol. 1 · 6 issues</span>
+      <span class="label">Vol. 1 · 7 issues</span>
       <span class="label">Maimul’s notebook</span>
     </div>
     <h1 class="title">Today <span class="title-i">I</span> Learned</h1>
@@ -368,18 +368,19 @@ pre { margin: 0; overflow-x: auto; background: var(--paper-2); padding: 10px 12p
 
   <main>
     <article class="lead-story" aria-labelledby="lead-h">
-      <a class="lead-cover" href="006-claude-code-in-plain-words/" tabindex="-1" aria-hidden="true"><img src="006-claude-code-in-plain-words/cover.png" width="1200" height="630" alt=""></a>
+      <a class="lead-cover" href="021-cost-one-workflow-then-size-the-cluster/" tabindex="-1" aria-hidden="true"><img src="021-cost-one-workflow-then-size-the-cluster/cover.png" width="1200" height="630" alt=""></a>
       <div class="lead-copy">
-        <span class="label kicker">No. 006 · claude-code · glossary · ai-coding-agents · permissions</span>
-        <h2 id="lead-h" class="lead-head"><a href="006-claude-code-in-plain-words/">Claude Code, in Plain Words</a></h2>
-        <p class="deck">My posts about AI coding agents keep leaning on words like tool, context, permission mode and hook. This is the one page that explains them, in the order you meet them when you ask Claude Code to do something, so every other post can link here.</p>
-        <div class="lead-learn"><span class="label">What you’ll learn</span><ul><li>What happens between your prompt and Claude&#x27;s answer, step by step.</li><li>Which words belong to Claude, which to Claude Code, and which to git or the shell.</li><li>How permission checks, permission rules and permission modes fit together.</li><li>Where each setting, skill and instruction file lives, and which one wins.</li></ul></div>
-        <span class="label">Friday, 13 November 2026 · <a class="read" href="006-claude-code-in-plain-words/">Read the issue →</a></span>
+        <span class="label kicker">No. 021 · kubernetes · autoscaling · keda · capacity-planning</span>
+        <h2 id="lead-h" class="lead-head"><a href="021-cost-one-workflow-then-size-the-cluster/">Cost One Workflow, Then Size the Cluster</a></h2>
+        <p class="deck">My dashboards showed a workflow runner pinned at its CPU limit and runs getting slow, and I could not say which workflow caused it or whether I needed more pods or bigger ones. Here is the method I now use: measure one workflow alone, then set every limit and every autoscaling target by multiplication instead of by feel.</p>
+        <div class="lead-learn"><span class="label">What you’ll learn</span><ul><li>Measuring the unit cost of one workflow, and estimating memory per run from a slope.</li><li>Finding software caps before hardware ones.</li><li>Turning the measurement into per-pod capacity, requests, limits and a KEDA target.</li><li>Sizing the rest of the stack from data and validating it.</li></ul></div>
+        <span class="label">Friday, 13 November 2026 · <a class="read" href="021-cost-one-workflow-then-size-the-cluster/">Read the issue →</a></span>
       </div>
     </article>
     <section class="earlier" aria-labelledby="earlier-h">
       <h2 id="earlier-h" class="label">Earlier editions</h2>
       <ol class="issues">
+      <li><span class="label">No. 006 · 13 Nov 2026</span><h3 class="issue-head"><a href="006-claude-code-in-plain-words/">Claude Code, in Plain Words</a></h3><p>My posts about AI coding agents keep leaning on words like tool, context, permission mode and hook. This is the one page that explains them, in the order you meet them when you ask Claude Code to do something, so every other post can link here.</p><span class="label">Related to: claude-code · glossary · ai-coding-agents · permissions</span></li>
       <li><span class="label">No. 005 · 26 Oct 2026</span><h3 class="issue-head"><a href="005-deploy-green-shipped-nothing/">The Deploy That Went Green and Shipped Nothing</a></h3><p>My home server&#x27;s deploy failed at step one, and every step after it reported success. Here&#x27;s how a failure goes missing in a deploy chain, and a copy-paste script that refuses to call nothing a success.</p><span class="label">Related to: deploys · git · bash · zsh</span></li>
       <li><span class="label">No. 004 · 24 Oct 2026</span><h3 class="issue-head"><a href="004-green-gate-red-commit/">The Guard That Couldn’t Read, So It Waved the Commit Through</a></h3><p>My AI coding agent was only allowed to commit code once the code passed my checks. One night the checks failed, the agent committed anyway, and the guard I&#x27;d built to stop exactly that did nothing. Here&#x27;s why, in plain words, and the rule that fixes it.</p><span class="label">Related to: claude-code · git-hooks · ai-coding-agents · ci</span></li>
       <li><span class="label">No. 003 · 21 Oct 2026</span><h3 class="issue-head"><a href="003-every-test-passed-production-500/">Every Test Passed. Production Returned 500.</a></h3><p>My test suite was green, my smoke test was green, and a photo upload in a FastAPI app I work on had never worked. Here&#x27;s the Python behaviour that hid it, the test that now catches it, and why fixing the bug still didn&#x27;t fix the feature.</p><span class="label">Related to: python · imports · fastapi · testing</span></li>

@@ -8,6 +8,21 @@
   <language>en</language>
   <lastBuildDate>Fri, 13 Nov 2026 09:00:00 +0800</lastBuildDate>
   <item>
+    <title>Cost One Workflow, Then Size the Cluster</title>
+    <link>https://maimul.github.io/blog/021-cost-one-workflow-then-size-the-cluster/</link>
+    <guid isPermaLink="true">https://maimul.github.io/blog/021-cost-one-workflow-then-size-the-cluster/</guid>
+    <pubDate>Fri, 13 Nov 2026 09:00:00 +0800</pubDate>
+    <description>My dashboards showed a workflow runner pinned at its CPU limit and runs getting slow, and I could not say which workflow caused it or whether I needed more pods or bigger ones. Here is the method I now use: measure one workflow alone, then set every limit and every autoscaling target by multiplication instead of by feel.</description>
+    <category>kubernetes</category>
+    <category>autoscaling</category>
+    <category>keda</category>
+    <category>capacity-planning</category>
+    <category>requests-and-limits</category>
+    <category>load-testing</category>
+    <category>prometheus</category>
+    <category>loki</category>
+  </item>
+  <item>
     <title>Claude Code, in Plain Words</title>
     <link>https://maimul.github.io/blog/006-claude-code-in-plain-words/</link>
     <guid isPermaLink="true">https://maimul.github.io/blog/006-claude-code-in-plain-words/</guid>

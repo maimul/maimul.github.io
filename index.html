@@ -291,6 +291,12 @@ h2{margin:0 0 .7em;font:800 clamp(30px,4.4vw,46px)/1.05 var(--display);font-stre
       <p class="section-intro">One thing I figured out, written up like a newspaper feature: what broke, what I thought was going on, what was actually true, with diagrams and the dead ends left in.</p>
       <!-- blog:latest -->
       <ul class="posts">
+        <li><a class="post" href="blog/021-cost-one-workflow-then-size-the-cluster/">
+          <span class="post-meta"><span class="post-no">No. 021</span><span>13 Nov 2026</span></span>
+          <h3>Cost One Workflow, Then Size the Cluster</h3>
+          <p>My dashboards showed a workflow runner pinned at its CPU limit and runs getting slow, and I could not say which workflow caused it or whether I needed more pods or bigger ones. Here is the method I now use: measure one workflow alone, then set every limit and every autoscaling target by multiplication instead of by feel.</p>
+          <span class="post-tags">kubernetes · autoscaling · keda</span>
+        </a></li>
         <li><a class="post" href="blog/006-claude-code-in-plain-words/">
           <span class="post-meta"><span class="post-no">No. 006</span><span>13 Nov 2026</span></span>
           <h3>Claude Code, in Plain Words</h3>
@@ -302,12 +308,6 @@ h2{margin:0 0 .7em;font:800 clamp(30px,4.4vw,46px)/1.05 var(--display);font-stre
           <h3>The Deploy That Went Green and Shipped Nothing</h3>
           <p>My home server&#x27;s deploy failed at step one, and every step after it reported success. Here&#x27;s how a failure goes missing in a deploy chain, and a copy-paste script that refuses to call nothing a success.</p>
           <span class="post-tags">deploys · git · bash</span>
-        </a></li>
-        <li><a class="post" href="blog/004-green-gate-red-commit/">
-          <span class="post-meta"><span class="post-no">No. 004</span><span>24 Oct 2026</span></span>
-          <h3>The Guard That Couldn’t Read, So It Waved the Commit Through</h3>
-          <p>My AI coding agent was only allowed to commit code once the code passed my checks. One night the checks failed, the agent committed anyway, and the guard I&#x27;d built to stop exactly that did nothing. Here&#x27;s why, in plain words, and the rule that fixes it.</p>
-          <span class="post-tags">claude-code · git-hooks · ai-coding-agents</span>
         </a></li>
       </ul>
       <!-- /blog:latest -->
